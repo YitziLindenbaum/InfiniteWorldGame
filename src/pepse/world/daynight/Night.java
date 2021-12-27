@@ -23,7 +23,7 @@ public class Night {
         night.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
         gameObjects.addGameObject(night, layer);
         night.setTag("night");
-        Transition<Float> transition = new Transition<Float>(night, night.renderer()::setOpaqueness,
+        new Transition<Float>(night, night.renderer()::setOpaqueness,
                 NOON_OPACITY, MIDNIGHT_OPACITY, Transition.CUBIC_INTERPOLATOR_FLOAT, cycleLength/2,
                 Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
         return night;

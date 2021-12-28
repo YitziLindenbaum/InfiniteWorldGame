@@ -12,7 +12,7 @@ public class SunHalo {
     public static GameObject create(GameObjectCollection gameObjects, int layer,
             GameObject sun, Color color){
         GameObject sunHalo = new GameObject(
-                Vector2.ZERO, new Vector2(200, 200),
+                Vector2.ZERO, new Vector2(300, 300),
                 new OvalRenderable(color));
         sunHalo.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
         gameObjects.addGameObject(sunHalo, layer);

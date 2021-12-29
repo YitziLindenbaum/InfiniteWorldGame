@@ -28,8 +28,8 @@ public class Sun {
         sun.setTag("sun");
 
         new Transition<Float>(sun,angle -> sun.setCenter(new Vector2(
-                windowDimensions.x()/2 - (float) Math.cos(angle) * (windowDimensions.x() - 100)/2,
-                 windowDimensions.y()/2 - (float) Math.sin(angle) * (windowDimensions.y() - 100)/2)),
+                windowDimensions.x()/2 - (float) Math.cos(Math.toRadians(angle)) * (windowDimensions.x() - 100)/2,
+                 windowDimensions.y()/2 - (float) Math.sin(Math.toRadians(angle)) * (windowDimensions.y() - 100)/2)),
                 START_ANGEL, FINAL_ANGEL, Transition.LINEAR_INTERPOLATOR_FLOAT, cycleLength,
                 Transition.TransitionType.TRANSITION_LOOP, null);
         return sun;

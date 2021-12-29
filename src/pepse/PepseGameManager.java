@@ -27,7 +27,7 @@ public class PepseGameManager extends GameManager {
         terrain.createInRange(0, (int)windowController.getWindowDimensions().x() );
         Night.create(gameObjects(), Layer.FOREGROUND, windowController.getWindowDimensions(), 30);
         GameObject sun = Sun.create(gameObjects(),Layer.BACKGROUND + 1,
-                windowController.getWindowDimensions(), 1000);
+                windowController.getWindowDimensions(), 30);
         GameObject sunHalo  = SunHalo.create(gameObjects(), Layer.BACKGROUND + 10, sun,
                 new Color(255,255,0,20));
 

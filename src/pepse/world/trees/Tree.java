@@ -3,10 +3,13 @@ package pepse.world.trees;
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
 import danogl.collisions.Layer;
+import danogl.components.GameObjectPhysics;
 import danogl.components.ScheduledTask;
 import danogl.components.Transition;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
+import pepse.util.ColorSupplier;
+import pepse.world.Avatar;
 import pepse.world.Block;
 import pepse.world.Terrain;
 
@@ -18,34 +21,35 @@ public class Tree {
      * It remains to deal with leaf fall and leaf collision in the ground
      */
     private static final float SIZE_LEAF = Block.SIZE * 0.9f;
-    public static final Color[] LEAVES_COLOR = {new Color(50, 200, 30),
-            new Color(20, 150, 20),
-            new Color(70, 230, 100)};// array of leaves color
+    public static final Color LEAF_COLOR = new Color(50, 200, 30);
     public static final int NUM_LEAVES_IN_ROW = 9;
     public static final int NUM_LEAVES_IN_COL = 9;
     public static final int HEIGHT_TREE_FROM_TERRAIN = Block.SIZE * 10;
     public static final Color TREE_COLOR = new Color(100, 50, 20);
     private GameObjectCollection gameObjects;
     private final Terrain terrain;
+    Random rand;
 
     public Tree(GameObjectCollection gameObjects, Terrain terrain){
         this.gameObjects = gameObjects;
         this.terrain = terrain;
     }
 
+    public void setSeed(int seed){
+        rand = new Random(seed);
+    }
     /**
      * create leaves
      * @param startX -
      * @param startY -
      */
-    private void createLeaves(float startX, float startY){
-        Random rand = new Random();
+    private void createLeaves(float startX, float startY , int treeLayer){
         for(float i = 0, x = startX; i < NUM_LEAVES_IN_ROW; i++, x +=  SIZE_LEAF){
             for (float j = 0, y = startY; j < NUM_LEAVES_IN_COL; j++, y += SIZE_LEAF){
                 //create new game object
                 GameObject leaf = new GameObject(new Vector2(x,y), Vector2.ONES.mult(SIZE_LEAF),
-                        new RectangleRenderable(LEAVES_COLOR[rand.nextInt(3)]));
-                gameObjects.addGameObject(leaf, Layer.FOREGROUND - 20);
+                        new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR,50)));
+                gameObjects.addGameObject(leaf, treeLayer);
 
                 //wait j/10 time as we were required in the exercise
                 new ScheduledTask(leaf, j / 10, false, () -> {
@@ -74,7 +78,6 @@ public class Tree {
      * @param maxX -
      */
     public void createInRange(int minX, int maxX){
-        Random rand = new Random();
         //normalize X to be integer number that divided by Block.SIZE
         int normalizeMinX = (minX/Block.SIZE) * Block.SIZE - Block.SIZE;
         int normalizeMaxX = (maxX/Block.SIZE) * Block.SIZE + Block.SIZE;
@@ -90,11 +93,19 @@ public class Tree {
                 //create new GameObject
                 GameObject tree = new GameObject(new Vector2(x, y),
                         new Vector2(Block.SIZE, HEIGHT_TREE_FROM_TERRAIN),
-                        new RectangleRenderable(TREE_COLOR));
-                gameObjects.addGameObject(tree, Layer.DEFAULT);
+                        new RectangleRenderable(ColorSupplier.approximateColor(TREE_COLOR,20)));
+                int layer = Layer.STATIC_OBJECTS + rand.nextInt(200);
+                if(rand.nextBoolean()){
+                    tree.physics().preventIntersectionsFromDirection(Vector2.ZERO);
+                    tree.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
+                    layer = Layer.STATIC_OBJECTS;
+                }
+                gameObjects.addGameObject(tree, layer);
+
+                tree.setTag("tree");
 
                 //create leaves
-                createLeaves(x - 4 * SIZE_LEAF, y - 4 * SIZE_LEAF);
+                createLeaves(x - 4 * SIZE_LEAF, y - 4 * SIZE_LEAF, layer);
             }
         }
 

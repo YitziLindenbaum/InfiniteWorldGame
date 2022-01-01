@@ -67,7 +67,7 @@ public class Terrain {
      * set noise to be sin function with random parameters that make the ground to be non-permanent
      */
     private void perlinNoise(){
-        Random rand = new Random();
+        Random rand = new Random(seed);
         //array of parameters to scala and factor of sin function
         float[] p = {-1.5f,-1.4f,-1.3f,-1.2f,-1.2f,-1.1f,-1.0f,-0.9f,-0.8f,-0.7f,-0.6f,
                 1.5f,1.4f,1.3f,1.2f,1.2f,1.1f,1.0f,0.9f,0.8f,0.7f,0.6f};

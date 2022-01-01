@@ -25,7 +25,7 @@ public class Avatar extends GameObject{
     private static final float VELOCITY_Y = -300;
     private static final float GRAVITY = 300;
     private static final Color AVATAR_COLOR = Color.DARK_GRAY;
-    public static final String ENERGY_COUNTER_STR = "ENERGY: %g";
+    public static final String ENERGY_COUNTER_STR = "ENERGY: %d";
     private float energyCounter = 100;
     private final UserInputListener inputListener;
     private GameObject energyCounterNumeric;
@@ -63,19 +63,18 @@ public class Avatar extends GameObject{
             //set energy counter - I remove this code to debug
             energyCounter -= 0.5f;
             energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
-                    ENERGY_COUNTER_STR, energyCounter)));
+                    ENERGY_COUNTER_STR, (int)energyCounter)));
 
             transform().setVelocityY(VELOCITY_Y);
             this.physics().preventIntersectionsFromDirection(Vector2.ZERO);
             //Eliminates gravity for 0.001 seconds, it's not working well - the avatar passes through the ground
             //Basically they provided us with this code, but I found that it make the Avatar to fall through the ground.
 
-            //physics().preventIntersectionsFromDirection(null);
-            //physics().setMass(-GameObjectPhysics.IMMOVABLE_MASS);
-//           new ScheduledTask(this, .0001f, false,
-//                    ()->{
+//            physics().preventIntersectionsFromDirection(null);
+//            //physics().setMass(-GameObjectPhysics.IMMOVABLE_MASS);
+//           new ScheduledTask(this, .0001f, false, ()->{
 //               this.physics().preventIntersectionsFromDirection(Vector2.ZERO);
-//               //physics().setMass(-GameObjectPhysics.IMMOVABLE_MASS);
+////               //physics().setMass(-GameObjectPhysics.IMMOVABLE_MASS);
 //           });
             return;
         }
@@ -88,10 +87,10 @@ public class Avatar extends GameObject{
             setVelocity(getVelocity().multY(0.99f));
         }
 
-        if (transform().getVelocity().x() == 0 && transform().getVelocity().y() == 0){
+        if (transform().getVelocity().x() == 0 && transform().getVelocity().y() == 0 && energyCounter < 100f){
             energyCounter += 0.5f;
             energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
-                    ENERGY_COUNTER_STR, energyCounter)));
+                    ENERGY_COUNTER_STR, (int)energyCounter)));
         }
 
     }
@@ -110,7 +109,7 @@ public class Avatar extends GameObject{
     {
         //add new object of energyCounterNumeric
         energyCounterNumeric = new GameObject(Vector2.ZERO, new Vector2(10, 20),
-                new TextRenderable(String.format(ENERGY_COUNTER_STR, energyCounter)));
+                new TextRenderable(String.format(ENERGY_COUNTER_STR, (int)energyCounter)));
         gameObjects.addGameObject(energyCounterNumeric, Layer.FOREGROUND * 2);
         energyCounterNumeric.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
         energyCounterNumeric.setTopLeftCorner(Vector2.ONES.mult(5));

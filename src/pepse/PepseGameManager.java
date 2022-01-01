@@ -94,7 +94,7 @@ public class PepseGameManager extends GameManager {
                 windowController.getWindowDimensions());
 
         //create energyCounter
-        //avatar.createEnergyCounter(gameObjects(), camera);
+        avatar.createEnergyCounter(gameObjects(), camera);
         setCamera(camera);
 
     }

@@ -4,6 +4,7 @@ import danogl.GameObject;
 import danogl.collisions.Collision;
 import danogl.collisions.GameObjectCollection;
 import danogl.collisions.Layer;
+import danogl.components.CoordinateSpace;
 import danogl.components.GameObjectPhysics;
 import danogl.components.ScheduledTask;
 import danogl.components.Transition;
@@ -60,9 +61,9 @@ public class Avatar extends GameObject{
         if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && inputListener.isKeyPressed(KeyEvent.VK_SHIFT) &&
                 energyCounter > 0) {
             //set energy counter - I remove this code to debug
-//            energyCounter -= 0.5f;
-//            energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
-//                    ENERGY_COUNTER_STR, energyCounter)));
+            energyCounter -= 0.5f;
+            energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
+                    ENERGY_COUNTER_STR, energyCounter)));
 
             transform().setVelocityY(VELOCITY_Y);
             this.physics().preventIntersectionsFromDirection(Vector2.ZERO);
@@ -79,14 +80,19 @@ public class Avatar extends GameObject{
             return;
         }
         //jump
-        if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0)
+        if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0){
             transform().setVelocityY(VELOCITY_Y);
+            return;
+        }
+        if (getVelocity().y() != 0){
+            setVelocity(getVelocity().multY(0.99f));
+        }
 
-//        if (transform().getVelocity().x() == 0 && transform().getVelocity().y() == 0){
-//            energyCounter += 0.5f;
-////            energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
-////                    ENERGY_COUNTER_STR, energyCounter)));
-//        }
+        if (transform().getVelocity().x() == 0 && transform().getVelocity().y() == 0){
+            energyCounter += 0.5f;
+            energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
+                    ENERGY_COUNTER_STR, energyCounter)));
+        }
 
     }
 
@@ -100,13 +106,14 @@ public class Avatar extends GameObject{
         return avatar;
 
     }
-    public void createEnergyCounter(GameObjectCollection gameObjects)
+    public void createEnergyCounter(GameObjectCollection gameObjects, Camera camera)
     {
         //add new object of energyCounterNumeric
         energyCounterNumeric = new GameObject(Vector2.ZERO, new Vector2(10, 20),
                 new TextRenderable(String.format(ENERGY_COUNTER_STR, energyCounter)));
         gameObjects.addGameObject(energyCounterNumeric, Layer.FOREGROUND * 2);
-
+        energyCounterNumeric.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
+        energyCounterNumeric.setTopLeftCorner(Vector2.ONES.mult(5));
         //set the counter placed in the top left corner of the camera, it's not looking good :(
 //        new ScheduledTask(energyCounterNumeric, 0.5f, true, () -> {
 //           energyCounterNumeric.setCenter(camera.getTopLeftCorner().add(Vector2.ONES.mult(5)));

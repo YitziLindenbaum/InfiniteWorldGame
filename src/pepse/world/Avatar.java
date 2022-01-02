@@ -66,6 +66,37 @@ public class Avatar extends GameObject{
         renderer().setRenderable(animationRight);
     }
 
+
+    @Override
+    public void render(Graphics2D g, Camera camera) {
+        super.render(g, camera);
+
+        energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
+            ENERGY_COUNTER_STR, (int)energyCounter)));
+
+        // right & left
+        if(inputListener.isKeyPressed(KeyEvent.VK_LEFT)) {
+            renderer().setIsFlippedHorizontally(true);
+        }
+        else if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
+            renderer().setIsFlippedHorizontally(false);
+        }
+
+        // jumping and flying
+        if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && inputListener.isKeyPressed(KeyEvent.VK_SHIFT) &&
+            energyCounter > 0) {
+            renderer().setRenderableAngle(45);
+        }
+
+        if (getVelocity().y() != 0){
+            renderer().setRenderableAngle(renderer().getRenderableAngle() * 0.6f);
+        }
+
+        if (transform().getVelocity().x() == 0 && transform().getVelocity().y() == 0){
+            renderer().setRenderableAngle(0);
+        }
+    }
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -73,27 +104,22 @@ public class Avatar extends GameObject{
         //move left
         if(inputListener.isKeyPressed(KeyEvent.VK_LEFT)) {
             xVel -= VELOCITY_X;
-            renderer().setIsFlippedHorizontally(true);
         }
 
         //move right
         if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
             xVel += VELOCITY_X;
-            renderer().setIsFlippedHorizontally(false);
         }
         transform().setVelocityX(xVel);
-        this.physics().preventIntersectionsFromDirection(Vector2.ZERO);
+        //this.physics().preventIntersectionsFromDirection(Vector2.ZERO);
 
         //fly
         if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && inputListener.isKeyPressed(KeyEvent.VK_SHIFT) &&
                 energyCounter > 0) {
             //set energy counter - I remove this code to debug
             energyCounter -= 0.5f;
-            energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
-                    ENERGY_COUNTER_STR, (int)energyCounter)));
-            renderer().setRenderableAngle(45);
             transform().setVelocityY(VELOCITY_Y);
-            this.physics().preventIntersectionsFromDirection(Vector2.ZERO);
+            //this.physics().preventIntersectionsFromDirection(Vector2.ZERO);
             //Eliminates gravity for 0.001 seconds, it's not working well - the avatar passes through the ground
             //Basically they provided us with this code, but I found that it make the Avatar to fall through the ground.
 
@@ -104,23 +130,20 @@ public class Avatar extends GameObject{
 //           });
             return;
         }
-        //jump
+
+        //jump and fly
         if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0){
             transform().setVelocityY(VELOCITY_Y);
             return;
         }
+
         if (getVelocity().y() != 0){
             setVelocity(getVelocity().multY(0.97f));
-            renderer().setRenderableAngle(renderer().getRenderableAngle() * 0.6f);
         }
 
         if (transform().getVelocity().x() == 0 && transform().getVelocity().y() == 0){
-            renderer().setRenderableAngle(0);
-            //renderer().setRenderable(imageReader.readImage("asset/spongebobWalkRight/img1.png", true));
-            if (energyCounter >= 100) return;
-            energyCounter += 0.5f;
-            energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
-                    ENERGY_COUNTER_STR, (int)energyCounter)));
+            energyCounter = Math.min(100, energyCounter +0.5f);
+
         }
 
     }

@@ -84,7 +84,7 @@ public class Avatar extends GameObject{
             return;
         }
         if (getVelocity().y() != 0){
-            setVelocity(getVelocity().multY(0.99f));
+            setVelocity(getVelocity().multY(0.97f));
         }
 
         if (transform().getVelocity().x() == 0 && transform().getVelocity().y() == 0 && energyCounter < 100f){
@@ -108,14 +108,10 @@ public class Avatar extends GameObject{
     public void createEnergyCounter(GameObjectCollection gameObjects, Camera camera)
     {
         //add new object of energyCounterNumeric
-        energyCounterNumeric = new GameObject(Vector2.ZERO, new Vector2(10, 20),
+        energyCounterNumeric = new GameObject(Vector2.ZERO, new Vector2(20, 40),
                 new TextRenderable(String.format(ENERGY_COUNTER_STR, (int)energyCounter)));
-        gameObjects.addGameObject(energyCounterNumeric, Layer.FOREGROUND * 2);
+        gameObjects.addGameObject(energyCounterNumeric, Layer.UI);
         energyCounterNumeric.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
         energyCounterNumeric.setTopLeftCorner(Vector2.ONES.mult(5));
-        //set the counter placed in the top left corner of the camera, it's not looking good :(
-//        new ScheduledTask(energyCounterNumeric, 0.5f, true, () -> {
-//           energyCounterNumeric.setCenter(camera.getTopLeftCorner().add(Vector2.ONES.mult(5)));
-//        });
     }
 }

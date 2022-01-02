@@ -42,13 +42,13 @@ public class Avatar extends GameObject{
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
         this.inputListener = inputListener;
-        this.animationLeft = new AnimationRenderable(new ImageRenderable[]{
+        /*this.animationLeft = new AnimationRenderable(new ImageRenderable[]{
                 this.imageReader.readImage("asset/spongebobWalkLeft/img1.png", true),
                 this.imageReader.readImage("asset/spongebobWalkLeft/img2.png", true),
                 this.imageReader.readImage("asset/spongebobWalkLeft/img3.png", true),
                 this.imageReader.readImage("asset/spongebobWalkLeft/img4.png", true),
                 this.imageReader.readImage("asset/spongebobWalkLeft/img5.png", true)
-        }, 0.5F);
+        }, 0.5F);*/
         this.animationRight = new AnimationRenderable(new ImageRenderable[]{
                 this.imageReader.readImage("asset/spongebobWalkRight/img1.png", true),
                 this.imageReader.readImage("asset/spongebobWalkRight/img2.png", true),
@@ -56,13 +56,13 @@ public class Avatar extends GameObject{
                 this.imageReader.readImage("asset/spongebobWalkRight/img4.png", true),
                 this.imageReader.readImage("asset/spongebobWalkRight/img5.png", true)
         }, 0.5F);
-        this.animationStand = new AnimationRenderable(new ImageRenderable[]{
+        /*this.animationStand = new AnimationRenderable(new ImageRenderable[]{
                 this.imageReader.readImage("asset/spongebobStand/img1.png", true),
                 this.imageReader.readImage("asset/spongebobStand/img2.png", true),
                 this.imageReader.readImage("asset/spongebobStand/img3.png", true),
                 this.imageReader.readImage("asset/spongebobStand/img4.png", true),
                 this.imageReader.readImage("asset/spongebobStand/img5.png", true)
-        }, 0.5F);
+        }, 0.5F);*/
         renderer().setRenderable(animationRight);
     }
 
@@ -73,13 +73,13 @@ public class Avatar extends GameObject{
         //move left
         if(inputListener.isKeyPressed(KeyEvent.VK_LEFT)) {
             xVel -= VELOCITY_X;
-            renderer().setRenderable(animationLeft);
+            renderer().setIsFlippedHorizontally(true);
         }
 
         //move right
         if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
             xVel += VELOCITY_X;
-            renderer().setRenderable(animationRight);
+            renderer().setIsFlippedHorizontally(false);
         }
         transform().setVelocityX(xVel);
         this.physics().preventIntersectionsFromDirection(Vector2.ZERO);

@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class PepseGameManager extends GameManager {
 
-    private static final int SEED = new Random().nextInt(20);
+    private static final int SEED = new Random().nextInt(5);
     private int MIN_X = -3000;
     private int MAX_X = 3000;
     private Terrain terrain;
@@ -77,9 +77,9 @@ public class PepseGameManager extends GameManager {
         tree.setSeed(SEED);
         tree.createInRange(MIN_X, MAX_X);
 
-        //set avatar collide with the ground and tree with layer STATIC
+        //set avatar collide with the ground and tree with STATIC_OBJECTS
         gameObjects().layers().shouldLayersCollide(Layer.DEFAULT,Layer.STATIC_OBJECTS,true);
-        //gameObjects().layers().shouldLayersCollide(Layer.DEFAULT,Layer.DEFAULT + 50 ,true);
+
         //create avatar
         float midX = windowDimensions.x()/2;
         float y = (float)Math.floor(terrain.groundHeightAt(midX)/Block.SIZE)*Block.SIZE - Block.SIZE;

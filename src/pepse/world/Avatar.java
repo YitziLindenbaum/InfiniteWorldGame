@@ -30,15 +30,40 @@ public class Avatar extends GameObject{
     private final UserInputListener inputListener;
     private GameObject energyCounterNumeric;
     private ImageReader imageReader;
+    private AnimationRenderable animationLeft;
+    private AnimationRenderable animationRight;
+    private AnimationRenderable animationStand;
 
     public Avatar(Vector2 pos, UserInputListener inputListener, ImageReader imageReader) {
-        super(pos, Vector2.ONES.mult(50), new OvalRenderable(AVATAR_COLOR));
-//        super(pos, Vector2.ONES.mult(100),
-//                imageReader.readImage("asset/spongbob.png", true));
+//        super(pos, Vector2.ONES.mult(50), new OvalRenderable(AVATAR_COLOR));
+        super(pos, Vector2.ONES.mult(50),
+                imageReader.readImage("asset/spongebobStand.png", true));
         this.imageReader = imageReader;
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
         this.inputListener = inputListener;
+        this.animationLeft = new AnimationRenderable(new ImageRenderable[]{
+                this.imageReader.readImage("asset/spongebobWalkLeft/img1.png", true),
+                this.imageReader.readImage("asset/spongebobWalkLeft/img2.png", true),
+                this.imageReader.readImage("asset/spongebobWalkLeft/img3.png", true),
+                this.imageReader.readImage("asset/spongebobWalkLeft/img4.png", true),
+                this.imageReader.readImage("asset/spongebobWalkLeft/img5.png", true)
+        }, 0.5F);
+        this.animationRight = new AnimationRenderable(new ImageRenderable[]{
+                this.imageReader.readImage("asset/spongebobWalkRight/img1.png", true),
+                this.imageReader.readImage("asset/spongebobWalkRight/img2.png", true),
+                this.imageReader.readImage("asset/spongebobWalkRight/img3.png", true),
+                this.imageReader.readImage("asset/spongebobWalkRight/img4.png", true),
+                this.imageReader.readImage("asset/spongebobWalkRight/img5.png", true)
+        }, 0.5F);
+        this.animationStand = new AnimationRenderable(new ImageRenderable[]{
+                this.imageReader.readImage("asset/spongebobStand/img1.png", true),
+                this.imageReader.readImage("asset/spongebobStand/img2.png", true),
+                this.imageReader.readImage("asset/spongebobStand/img3.png", true),
+                this.imageReader.readImage("asset/spongebobStand/img4.png", true),
+                this.imageReader.readImage("asset/spongebobStand/img5.png", true)
+        }, 0.5F);
+        renderer().setRenderable(animationRight);
     }
 
     @Override
@@ -48,12 +73,14 @@ public class Avatar extends GameObject{
         //move left
         if(inputListener.isKeyPressed(KeyEvent.VK_LEFT)) {
             xVel -= VELOCITY_X;
-//            renderer().setRenderable(imageReader.readImage("asset/spongbobWalkLeft.gif",true));
+            renderer().setRenderable(animationLeft);
         }
 
         //move right
-        if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT))
+        if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
             xVel += VELOCITY_X;
+            renderer().setRenderable(animationRight);
+        }
         transform().setVelocityX(xVel);
         this.physics().preventIntersectionsFromDirection(Vector2.ZERO);
 
@@ -64,14 +91,13 @@ public class Avatar extends GameObject{
             energyCounter -= 0.5f;
             energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
                     ENERGY_COUNTER_STR, (int)energyCounter)));
-
+            renderer().setRenderableAngle(45);
             transform().setVelocityY(VELOCITY_Y);
             this.physics().preventIntersectionsFromDirection(Vector2.ZERO);
             //Eliminates gravity for 0.001 seconds, it's not working well - the avatar passes through the ground
             //Basically they provided us with this code, but I found that it make the Avatar to fall through the ground.
 
 //            physics().preventIntersectionsFromDirection(null);
-//            //physics().setMass(-GameObjectPhysics.IMMOVABLE_MASS);
 //           new ScheduledTask(this, .0001f, false, ()->{
 //               this.physics().preventIntersectionsFromDirection(Vector2.ZERO);
 ////               //physics().setMass(-GameObjectPhysics.IMMOVABLE_MASS);
@@ -85,9 +111,13 @@ public class Avatar extends GameObject{
         }
         if (getVelocity().y() != 0){
             setVelocity(getVelocity().multY(0.97f));
+            renderer().setRenderableAngle(renderer().getRenderableAngle() * 0.6f);
         }
 
-        if (transform().getVelocity().x() == 0 && transform().getVelocity().y() == 0 && energyCounter < 100f){
+        if (transform().getVelocity().x() == 0 && transform().getVelocity().y() == 0){
+            renderer().setRenderableAngle(0);
+            //renderer().setRenderable(imageReader.readImage("asset/spongebobWalkRight/img1.png", true));
+            if (energyCounter >= 100) return;
             energyCounter += 0.5f;
             energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
                     ENERGY_COUNTER_STR, (int)energyCounter)));

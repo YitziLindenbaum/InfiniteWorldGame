@@ -23,7 +23,7 @@ public class Terrain {
     private final GameObjectCollection gameObjects;
     private final int groundLayer;
     private final float groundHeightAtX0;
-    private int seed;
+    private final int seed;
     private final Vector2 windowDimensions;
     private Function<Float,Float> noise;
 
@@ -35,16 +35,16 @@ public class Terrain {
         this.groundLayer = groundLayer;
         this.groundHeightAtX0 = windowDimensions.y() * (2f/3f);
         this.windowDimensions = windowDimensions;
-        this.seed = seed; //I don't know why we need it in our implementation
+        this.seed = seed;
         //set the lambda noise
         perlinNoise();
     }
 
     public float groundHeightAt(float x){
         //create objects of dots that help to debug
-        gameObjects.addGameObject(new GameObject(new Vector2(x,noise.apply(x) ),
-                new Vector2(3.0f,3.0f),
-                new OvalRenderable(Color.BLACK)),Layer.FOREGROUND);
+//        gameObjects.addGameObject(new GameObject(new Vector2(x,noise.apply(x) ),
+//                new Vector2(3.0f,3.0f),
+//                new OvalRenderable(Color.BLACK)),Layer.FOREGROUND);
 
         return noise.apply(x);
     }

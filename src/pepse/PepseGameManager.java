@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class PepseGameManager extends GameManager {
 
-    private static final int SEED = new Random().nextInt(5);
+    private static final int SEED = 100 + new Random().nextInt(5);
     private int MIN_X = -3000;
     private int MAX_X = 3000;
     private Terrain terrain;
@@ -52,6 +52,7 @@ public class PepseGameManager extends GameManager {
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
 
+        System.out.println(SEED);
         windowDimensions = windowController.getWindowDimensions();
 
         //create sky
@@ -82,7 +83,7 @@ public class PepseGameManager extends GameManager {
 
         //create avatar
         float midX = windowDimensions.x()/2;
-        float y = (float)Math.floor(terrain.groundHeightAt(midX)/Block.SIZE)*Block.SIZE - Block.SIZE;
+        float y = (float)Math.floor(terrain.groundHeightAt(midX)/Block.SIZE)*Block.SIZE - Block.SIZE -75;
         Vector2 initialAvatarLocation = new Vector2(midX, y);
         avatar = Avatar.create(gameObjects(), Layer.DEFAULT,initialAvatarLocation,
                 inputListener, imageReader );

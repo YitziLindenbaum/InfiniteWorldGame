@@ -54,7 +54,7 @@ public class Terrain {
         for(float x = minX, i = 0 ; x <= maxX; x+= Block.SIZE, i++){
             float height = (float) Math.floor(groundHeightAt(x) / Block.SIZE) * Block.SIZE;
             for (float y = height, j = 0; j < TERRAIN_DEPTH; y += Block.SIZE, j++){
-                Block block = new Block(new Vector2(x,y),
+                Block block = new Block(Vector2.of(x,y),
                         new RectangleRenderable(ColorSupplier.approximateColor(GROUND_COLORS[(int) (i + j) % 3])));
                 gameObjects.addGameObject(block, groundLayer);
                 block.setTag("ground");

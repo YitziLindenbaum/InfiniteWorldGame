@@ -74,7 +74,7 @@ public class PepseGameManager extends GameManager {
                 new Color(255,255,0,20));
 
         //create trees
-        tree = new Tree(gameObjects(), terrain);
+        tree = new Tree(gameObjects(), terrain::groundHeightAt);
         tree.setSeed(SEED);
         tree.createInRange(MIN_X, MAX_X);
 

@@ -1,13 +1,10 @@
 package pepse.world;
 
 import danogl.GameObject;
-import danogl.collisions.Collision;
 import danogl.collisions.GameObjectCollection;
 import danogl.collisions.Layer;
 import danogl.components.CoordinateSpace;
 import danogl.components.GameObjectPhysics;
-import danogl.components.ScheduledTask;
-import danogl.components.Transition;
 import danogl.gui.ImageReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.rendering.*;
@@ -29,10 +26,8 @@ public class Avatar extends GameObject{
     private float energyCounter = 100;
     private final UserInputListener inputListener;
     private GameObject energyCounterNumeric;
-    private ImageReader imageReader;
-    private AnimationRenderable animationLeft;
-    private AnimationRenderable animationRight;
-    private AnimationRenderable animationStand;
+    private final ImageReader imageReader;
+    private final AnimationRenderable animation;
 
     public Avatar(Vector2 pos, UserInputListener inputListener, ImageReader imageReader) {
 //        super(pos, Vector2.ONES.mult(50), new OvalRenderable(AVATAR_COLOR));
@@ -42,14 +37,8 @@ public class Avatar extends GameObject{
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
         this.inputListener = inputListener;
-        /*this.animationLeft = new AnimationRenderable(new ImageRenderable[]{
-                this.imageReader.readImage("asset/spongebobWalkLeft/img1.png", true),
-                this.imageReader.readImage("asset/spongebobWalkLeft/img2.png", true),
-                this.imageReader.readImage("asset/spongebobWalkLeft/img3.png", true),
-                this.imageReader.readImage("asset/spongebobWalkLeft/img4.png", true),
-                this.imageReader.readImage("asset/spongebobWalkLeft/img5.png", true)
-        }, 0.5F);*/
-        this.animationRight = new AnimationRenderable(new ImageRenderable[]{
+
+        this.animation = new AnimationRenderable(new ImageRenderable[]{
                 this.imageReader.readImage("asset/spongebobWalkRight/img1.png", true),
                 this.imageReader.readImage("asset/spongebobWalkRight/img2.png", true),
                 this.imageReader.readImage("asset/spongebobWalkRight/img3.png", true),
@@ -63,7 +52,8 @@ public class Avatar extends GameObject{
                 this.imageReader.readImage("asset/spongebobStand/img4.png", true),
                 this.imageReader.readImage("asset/spongebobStand/img5.png", true)
         }, 0.5F);*/
-        renderer().setRenderable(animationRight);
+        renderer().setRenderable(animation);
+
     }
 
 
@@ -145,8 +135,8 @@ public class Avatar extends GameObject{
             setVelocity(getVelocity().multY(0.97f));
         }
 
-        if (transform().getVelocity().x() == 0 && transform().getVelocity().y() == 0){
-            energyCounter = Math.min(100, energyCounter +0.5f);
+        if (transform().getVelocity().y() == 0){
+            energyCounter = Math.min(100, energyCounter + 0.5f);
         }
 
     }
@@ -161,6 +151,7 @@ public class Avatar extends GameObject{
         return avatar;
 
     }
+
     public void createEnergyCounter(GameObjectCollection gameObjects, Camera camera)
     {
         //add new object of energyCounterNumeric

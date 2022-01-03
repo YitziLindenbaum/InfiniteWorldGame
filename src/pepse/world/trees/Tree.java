@@ -15,6 +15,7 @@ import pepse.world.Terrain;
 
 import java.awt.*;
 import java.util.Random;
+import java.util.function.Function;
 
 public class Tree {
     /**
@@ -27,12 +28,12 @@ public class Tree {
     public static final int HEIGHT_TREE_FROM_TERRAIN = Block.SIZE * 8;
     public static final Color TREE_COLOR = new Color(100, 50, 20);
     private GameObjectCollection gameObjects;
-    private final Terrain terrain;
+    private final Function<Float, Float> groundHeightAt;
     Random rand;
 
-    public Tree(GameObjectCollection gameObjects, Terrain terrain){
+    public Tree(GameObjectCollection gameObjects, Function<Float, Float> groundHeightAt){
         this.gameObjects = gameObjects;
-        this.terrain = terrain;
+        this.groundHeightAt = groundHeightAt;
     }
 
     public void setSeed(int seed){
@@ -88,7 +89,7 @@ public class Tree {
                 //get groundHeightAt(x), normalize to number that divided by Block.SIZE
                 // and adds the desired height to the tree.
                 int height = rand.nextInt(7) * Block.SIZE;
-                float y = (float) Math.floor(terrain.groundHeightAt(x) / Block.SIZE) * Block.SIZE -
+                float y = (float) Math.floor(groundHeightAt.apply((float) x) / Block.SIZE) * Block.SIZE -
                         HEIGHT_TREE_FROM_TERRAIN - height;
 
                 //create new GameObject

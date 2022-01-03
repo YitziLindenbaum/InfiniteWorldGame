@@ -37,6 +37,8 @@ public class Tree {
     public void setSeed(int seed){
         rand = new Random(seed);
     }
+
+
     /**
      * create leaves
      * @param startX -
@@ -50,25 +52,29 @@ public class Tree {
                         new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR,50)));
                 gameObjects.addGameObject(leaf, treeLayer);
 
-                //wait j/10 time as we were required in the exercise
-                new ScheduledTask(leaf, j / 10, false, () -> {
-
-                    //swaying leaves
-                    new Transition<Float>(leaf, leaf.renderer()::setRenderableAngle,
-                            //choose random degree in range [-30 - 30]
-                            -30 * rand.nextFloat(), 30 * rand.nextFloat(),
-                            Transition.LINEAR_INTERPOLATOR_FLOAT, 5,
-                            Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
-
-                    //Changing leaves width
-                    new Transition<Vector2>(leaf, leaf::setDimensions,
-                            //Change leaves width to be at a minimum 0.8 * SIZE_LEAF
-                            Vector2.ONES.mult(SIZE_LEAF),new Vector2(SIZE_LEAF * 0.8f, SIZE_LEAF),
-                            Transition.LINEAR_INTERPOLATOR_VECTOR, 5,
-                            Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
+                //wait j/10 time as we were required in the exercise, then make leaves sway and narrow
+                new ScheduledTask(leaf, j/10, false, () -> {
+                    swayLeaf(leaf);
+                    narrowLeaf(leaf);
                 });
             }
         }
+    }
+
+    private void swayLeaf(GameObject leaf) {
+        new Transition<Float>(leaf, leaf.renderer()::setRenderableAngle,
+            //choose random degree in range [-30 - 30]
+            -30 * rand.nextFloat(), 30 * rand.nextFloat(),
+            Transition.LINEAR_INTERPOLATOR_FLOAT, 5f + rand.nextInt(6),
+            Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
+    }
+
+    private void narrowLeaf(GameObject leaf) {
+        new Transition<Vector2>(leaf, leaf::setDimensions,
+            //Change leaves width to be at a minimum 0.8 * SIZE_LEAF
+            Vector2.ONES.mult(SIZE_LEAF), Vector2.of(SIZE_LEAF * 0.8f, SIZE_LEAF),
+            Transition.LINEAR_INTERPOLATOR_VECTOR, 5f + rand.nextInt(6),
+            Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
     }
 
     /**

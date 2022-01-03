@@ -9,9 +9,7 @@ import danogl.components.Transition;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
 import pepse.util.ColorSupplier;
-import pepse.world.Avatar;
 import pepse.world.Block;
-import pepse.world.Terrain;
 
 import java.awt.*;
 import java.util.Random;
@@ -79,40 +77,44 @@ public class Tree {
      * @param maxX -
      */
     public void createInRange(int minX, int maxX){
-        //normalize X to be integer number that divided by Block.SIZE
+        //normalize X to be integer number that is divided by Block.SIZE
         int normalizeMinX = (minX/Block.SIZE) * Block.SIZE - Block.SIZE;
         int normalizeMaxX = (maxX/Block.SIZE) * Block.SIZE + Block.SIZE;
 
         for (int x = normalizeMinX; x <= normalizeMaxX; x += Block.SIZE){
             //Creates a tree at a probability of 0.1 as requested
-            if(rand.nextFloat() <= 0.1f){
-                //get groundHeightAt(x), normalize to number that divided by Block.SIZE
-                // and adds the desired height to the tree.
-                int height = rand.nextInt(7) * Block.SIZE;
+            if(rand.nextInt(10) == 0){
+                // get groundHeightAt(x), normalize to number that is divided by Block.SIZE,
+                // and add the desired extra height to the tree.
+                int extraHeight = rand.nextInt(7) * Block.SIZE;
                 float y = (float) Math.floor(groundHeightAt.apply((float) x) / Block.SIZE) * Block.SIZE -
-                        HEIGHT_TREE_FROM_TERRAIN - height;
+                        HEIGHT_TREE_FROM_TERRAIN - extraHeight;
 
-                //create new GameObject
-                GameObject tree = new GameObject(new Vector2(x, y),
-                        new Vector2(Block.SIZE, HEIGHT_TREE_FROM_TERRAIN + height),
-                        new RectangleRenderable(ColorSupplier.approximateColor(TREE_COLOR,20)));
-                int layer = Layer.STATIC_OBJECTS + rand.nextInt(200);
-                if(rand.nextBoolean()){
-                    tree.physics().preventIntersectionsFromDirection(Vector2.ZERO);
-                    tree.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
-                    layer = Layer.STATIC_OBJECTS;
-                }
-                gameObjects.addGameObject(tree, layer);
-
-                tree.setTag("tree");
-
-                //create leaves
-                int rows = 2 + rand.nextInt(3);
-                int cols = 2 + rand.nextInt(3);
-                createLeaves(x - rows * SIZE_LEAF,  y - cols * SIZE_LEAF,
-                        rows *2 +1, cols * 2 +1, layer);
+                createTree(x, y, extraHeight);
             }
         }
 
+    }
+
+    private void createTree(int x, float y, int extraHeight) {
+        GameObject tree = new GameObject(Vector2.of(x, y),
+                Vector2.of(Block.SIZE, HEIGHT_TREE_FROM_TERRAIN + extraHeight),
+                new RectangleRenderable(ColorSupplier.approximateColor(TREE_COLOR,20)));
+        int layer = Layer.STATIC_OBJECTS + rand.nextInt(200);
+        // randomly (coin-flip) choose that tree blocks avatar
+        if(rand.nextBoolean()){
+            tree.physics().preventIntersectionsFromDirection(Vector2.ZERO);
+            tree.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
+            layer = Layer.STATIC_OBJECTS;
+        }
+        gameObjects.addGameObject(tree, layer);
+
+        tree.setTag("tree");
+
+        //create leaves
+        int rows = 2 + rand.nextInt(3);
+        int cols = 2 + rand.nextInt(3);
+        createLeaves(x - rows * SIZE_LEAF,  y - cols * SIZE_LEAF,
+                rows *2 +1, cols * 2 +1, layer);
     }
 }

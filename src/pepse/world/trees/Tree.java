@@ -29,6 +29,8 @@ public class Tree {
     private static final float FALL_SPEED = 20;
     private static final float DEAD_TIME = 5;
     private static final float MAX_LEAF_LIFE = 420;
+    private static final Float FALLING_SWAY_SPEED = 15f;
+    private static final float FALLING_SWAY_CYCLE_LENGTH = 4;
     private final GameObjectCollection gameObjects;
     private final Function<Float, Float> groundHeightAt;
     Random rand;
@@ -69,10 +71,9 @@ public class Tree {
             narrowLeaf(leaf);
         });
 
+        // control leaf life-cycle
         new ScheduledTask(leaf, MAX_LEAF_LIFE * rand.nextFloat(), false,
-            () -> {
-            fallLeaf(leaf, treeLayer, x, y);
-        });
+            () -> fallLeaf(leaf, treeLayer, x, y));
     }
 
     private void swayLeaf(GameObject leaf) {
@@ -94,6 +95,9 @@ public class Tree {
     private void fallLeaf(GameObject leaf, int treeLayer, float x, float y) {
         leaf.renderer().fadeOut(FADEOUT_TIME, delayedRecreateLeaf(leaf, treeLayer, x, y));
         leaf.transform().setVelocityY(FALL_SPEED);
+        new Transition<Float>(leaf, leaf.transform()::setVelocityX, FALLING_SWAY_SPEED, -FALLING_SWAY_SPEED,
+            Transition.CUBIC_INTERPOLATOR_FLOAT
+            , FALLING_SWAY_CYCLE_LENGTH, Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
     }
 
     private Runnable delayedRecreateLeaf(GameObject leaf, int treeLayer, float x, float y) {

@@ -25,6 +25,8 @@ public class Tree {
     public static final int NUM_LEAVES_IN_COL = 9;
     public static final int HEIGHT_TREE_FROM_TERRAIN = Block.SIZE * 8;
     public static final Color TREE_COLOR = new Color(100, 50, 20);
+    private static final float FADEOUT_TIME = 10;
+    private static final float FALL_SPEED = 20;
     private GameObjectCollection gameObjects;
     private final Function<Float, Float> groundHeightAt;
     Random rand;
@@ -45,20 +47,29 @@ public class Tree {
      * @param startY -
      */
     private void createLeaves(float startX, float startY , int numRows, int numCols, int treeLayer){
-        for(float i = 0, x = startX; i < numRows; i++, x +=  SIZE_LEAF){
-            for (float j = 0, y = startY; j < numCols; j++, y += SIZE_LEAF){
+        for(float row = 0, x = startX; row < numRows; row++, x +=  SIZE_LEAF){
+            for (float col = 0, y = startY; col < numCols; col++, y += SIZE_LEAF){
                 //create new game object
-                GameObject leaf = new GameObject(new Vector2(x,y), Vector2.ONES.mult(SIZE_LEAF),
-                        new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR,50)));
-                gameObjects.addGameObject(leaf, treeLayer);
-
-                //wait j/10 time as we were required in the exercise, then make leaves sway and narrow
-                new ScheduledTask(leaf, j/10, false, () -> {
-                    swayLeaf(leaf);
-                    narrowLeaf(leaf);
-                });
+                createLeaf(treeLayer, x, y);
             }
         }
+    }
+
+    private void createLeaf(int treeLayer, float x, float y) {
+        GameObject leaf = new GameObject(Vector2.of(x, y), Vector2.ONES.mult(SIZE_LEAF),
+                new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR,50)));
+        gameObjects.addGameObject(leaf, treeLayer);
+
+        //wait j/10 time as we were required in the exercise, then make leaves sway and narrow
+        float waitTime = leaf.getTopLeftCorner().y() % 10;
+        new ScheduledTask(leaf, waitTime, false, () -> {
+            swayLeaf(leaf);
+            narrowLeaf(leaf);
+        });
+
+        new ScheduledTask(leaf, 5 + 20 * rand.nextFloat(), false, () -> {
+            fallLeaf(leaf, treeLayer, x, y);
+        });
     }
 
     private void swayLeaf(GameObject leaf) {
@@ -75,6 +86,11 @@ public class Tree {
             Vector2.ONES.mult(SIZE_LEAF), Vector2.of(SIZE_LEAF * 0.8f, SIZE_LEAF),
             Transition.LINEAR_INTERPOLATOR_VECTOR, 5f + rand.nextInt(6),
             Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
+    }
+
+    private void fallLeaf(GameObject leaf, int treeLayer, float x, float y) {
+        leaf.renderer().fadeOut(FADEOUT_TIME, () -> createLeaf(treeLayer, x, y));
+        leaf.transform().setVelocityY(FALL_SPEED);
     }
 
     /**

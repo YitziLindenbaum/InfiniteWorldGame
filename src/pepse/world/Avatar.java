@@ -20,7 +20,7 @@ public class Avatar extends GameObject{
 
     private static final float VELOCITY_X = 300;
     private static final float VELOCITY_Y = -300;
-    private static final float GRAVITY = 600;
+    private static final float GRAVITY = 500;
     private static final Color AVATAR_COLOR = Color.DARK_GRAY;
     public static final String ENERGY_COUNTER_STR = "ENERGY: %d";
     private float energyCounter = 100;
@@ -66,9 +66,11 @@ public class Avatar extends GameObject{
 
         // right & left
         if(inputListener.isKeyPressed(KeyEvent.VK_LEFT)) {
+            renderer().setRenderable(animation);
             renderer().setIsFlippedHorizontally(true);
         }
         else if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
+            renderer().setRenderable(animation);
             renderer().setIsFlippedHorizontally(false);
         }
 
@@ -76,14 +78,16 @@ public class Avatar extends GameObject{
         if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && inputListener.isKeyPressed(KeyEvent.VK_SHIFT) &&
             energyCounter > 0) {
             renderer().setRenderableAngle(-45);
+            return;
         }
 
-//        if (getVelocity().y() != 0){
-//            renderer().setRenderableAngle(0);
-//        }
+        if (getVelocity().y() != 0){
+            renderer().setRenderableAngle(0);
+        }
 
         if (transform().getVelocity().x() == 0 && transform().getVelocity().y() == 0){
             renderer().setRenderableAngle(0);
+            renderer().setRenderable(imageReader.readImage("asset/spongebobStand.png", true));
         }
     }
 

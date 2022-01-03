@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class PepseGameManager extends GameManager {
 
-    private static final int SEED = 100 + new Random().nextInt(5);
+    private static final int SEED = 52;//100 + new Random().nextInt(5);
     private int MIN_X = -3000;
     private int MAX_X = 3000;
     private Terrain terrain;

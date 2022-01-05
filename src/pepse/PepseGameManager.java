@@ -23,28 +23,46 @@ import java.util.Random;
 
 public class PepseGameManager extends GameManager {
 
-    private static final int SEED = 52;//100 + new Random().nextInt(5);
-    private int MIN_X = -3000;
-    private int MAX_X = 3000;
+    private static final int SEED = 100 + new Random().nextInt(50);
+    private static final int MIN_X = -3000;
+    private static final int MAX_X = 3000;
+    private static int minX = MIN_X, maxX = MAX_X;
     private Terrain terrain;
     private  Avatar avatar;
     private  Tree tree;
     private Vector2 windowDimensions;
+
+    private void removeInRange(int minX, int maxX){
+        for (GameObject object : gameObjects()){
+            if (object.getTopLeftCorner().x() > maxX){
+                gameObjects().removeGameObject(object, Layer.STATIC_OBJECTS);
+            }
+            else if (object.getTopLeftCorner().x() < minX){
+                gameObjects().removeGameObject(object, Layer.STATIC_OBJECTS);
+            }
+        }
+    }
 
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
         //Real world - adding more trees and ground
         //Makes the program slower, we'll probably have to deal with it in another way.
-        if(avatar.getCenter().x() + windowDimensions.x() > MAX_X){
-            terrain.createInRange(MAX_X, 2 * MAX_X);
-            tree.createInRange(MAX_X, 2 * MAX_X);
-            MAX_X += MAX_X;
+        if(avatar.getCenter().x() + windowDimensions.x() > maxX){
+            System.out.println("in1");
+            terrain.createInRange(maxX + 1, maxX + MAX_X);
+            tree.createInRange(maxX + 1, maxX + MAX_X);
+            maxX += MAX_X;
+            minX -= MIN_X;
+            removeInRange(minX, maxX);
         }
-        if (avatar.getCenter().x() - windowDimensions.x() < MIN_X){
-            terrain.createInRange(2 * MIN_X, MIN_X);
-            tree.createInRange(2 * MIN_X, MIN_X);
-            MIN_X += MIN_X;
+        if (avatar.getCenter().x() - windowDimensions.x() < minX){
+            System.out.println("in2");
+            terrain.createInRange(minX + MIN_X, minX - 1);
+            tree.createInRange(minX + MIN_X, minX - 1);
+            maxX -= MAX_X;
+            minX += MIN_X;
+            removeInRange(minX, maxX);
         }
     }
 
@@ -103,5 +121,6 @@ public class PepseGameManager extends GameManager {
     public static void main(String[] args) {
 
         new PepseGameManager().run();
+
     }
 }

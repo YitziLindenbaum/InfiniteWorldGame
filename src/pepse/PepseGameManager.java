@@ -54,7 +54,7 @@ public class PepseGameManager extends GameManager {
             tree.createInRange(maxX, maxX + MAX_X);
             maxX += MAX_X;
             minX -= MIN_X;
-            removeInRange(minX, maxX);
+            //removeInRange(minX, maxX);
         }
         if (avatar.getCenter().x() - windowDimensions.x() < minX){
             System.out.println("in2");
@@ -62,7 +62,7 @@ public class PepseGameManager extends GameManager {
             tree.createInRange(minX + MIN_X, minX);
             maxX -= MAX_X;
             minX += MIN_X;
-            removeInRange(minX, maxX);
+            //removeInRange(minX, maxX);
         }
     }
 

@@ -139,7 +139,7 @@ public class Tree {
         GameObject tree = new GameObject(Vector2.of(x, y),
                 Vector2.of(Block.SIZE, HEIGHT_TREE_FROM_TERRAIN + extraHeight),
                 new RectangleRenderable(ColorSupplier.approximateColor(TREE_COLOR,20)));
-        int layer = Layer.STATIC_OBJECTS + rand.nextInt(200);
+        int layer = Layer.STATIC_OBJECTS;
         // randomly (coin-flip) choose that tree blocks avatar
         if(rand.nextBoolean()){
             tree.physics().preventIntersectionsFromDirection(Vector2.ZERO);

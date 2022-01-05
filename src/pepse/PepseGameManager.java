@@ -24,8 +24,8 @@ import java.util.Random;
 public class PepseGameManager extends GameManager {
 
     private static final int SEED = 100 + new Random().nextInt(50);
-    private static final int MIN_X = -3000;
-    private static final int MAX_X = 3000;
+    private static final int MIN_X = -9000;
+    private static final int MAX_X = 9000;
     private static int minX = MIN_X, maxX = MAX_X;
     private Terrain terrain;
     private  Avatar avatar;
@@ -33,7 +33,9 @@ public class PepseGameManager extends GameManager {
     private Vector2 windowDimensions;
 
     private void removeInRange(int minX, int maxX){
-        for (GameObject object : gameObjects()){
+        for (GameObject object : gameObjects().objectsInLayer(Layer.STATIC_OBJECTS)){
+            if(!object.getTag().equals("tree") && !object.getTag().equals("leaf") &&
+                    !object.getTag().equals("ground")) continue;
             if (object.getTopLeftCorner().x() > maxX){
                 gameObjects().removeGameObject(object, Layer.STATIC_OBJECTS);
             }
@@ -53,14 +55,14 @@ public class PepseGameManager extends GameManager {
             terrain.createInRange(maxX, maxX + MAX_X);
             tree.createInRange(maxX, maxX + MAX_X);
             maxX += MAX_X;
-            minX -= MIN_X;
+            //minX -= MIN_X;
             //removeInRange(minX, maxX);
         }
         if (avatar.getCenter().x() - windowDimensions.x() < minX){
             System.out.println("in2");
             terrain.createInRange(minX + MIN_X, minX);
             tree.createInRange(minX + MIN_X, minX);
-            maxX -= MAX_X;
+            //maxX -= MAX_X;
             minX += MIN_X;
             //removeInRange(minX, maxX);
         }

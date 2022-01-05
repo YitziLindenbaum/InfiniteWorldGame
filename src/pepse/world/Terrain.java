@@ -1,9 +1,6 @@
 package pepse.world;
 
-import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
-import danogl.collisions.Layer;
-import danogl.gui.rendering.OvalRenderable;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
 import pepse.util.ColorSupplier;
@@ -25,7 +22,7 @@ public class Terrain {
     private final float groundHeightAtX0;
     private final int seed;
     private final Vector2 windowDimensions;
-    private Function<Float,Float> noise;
+    private final Function<Float,Float> noise;
 
 
     public Terrain(GameObjectCollection gameObjects,
@@ -37,7 +34,7 @@ public class Terrain {
         this.windowDimensions = windowDimensions;
         this.seed = seed;
         //set the lambda noise
-        perlinNoise();
+        this.noise = generateNoiseFunc();
     }
 
     public float groundHeightAt(float x){
@@ -66,7 +63,7 @@ public class Terrain {
     /**
      * set noise to be sin function with random parameters that make the ground to be non-permanent
      */
-    private void perlinNoise(){
+    private Function<Float, Float> generateNoiseFunc(){
         Random rand = new Random(seed);
         //array of parameters to scala and factor of sin function
         float[] p = {-1.5f,-1.4f,-1.3f,-1.2f,-1.2f,-1.1f,-1.0f,-0.9f,-0.8f,-0.7f,-0.6f,
@@ -93,7 +90,7 @@ public class Terrain {
 //                factorE + "sin("+scalaE/normalizeRangeX+"e x) + " + factorPi + "sin("+ scalaPi/normalizeRangeX+"pi x))");
 
 
-        noise = x ->  1.1f * groundHeightAtX0 +  totalFactor * (float)(factor1 * Math.sin(scala1 * x) +
+        return (Float x) ->  1.1f * groundHeightAtX0 +  totalFactor * (float)(factor1 * Math.sin(scala1 * x) +
                 factorE * Math.sin(scalaE * Math.E * x) + factorPi * Math.sin(scalaPi * Math.PI * x));
     }
 }

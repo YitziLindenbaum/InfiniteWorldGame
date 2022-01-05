@@ -50,16 +50,16 @@ public class PepseGameManager extends GameManager {
         //Makes the program slower, we'll probably have to deal with it in another way.
         if(avatar.getCenter().x() + windowDimensions.x() > maxX){
             System.out.println("in1");
-            terrain.createInRange(maxX + 1, maxX + MAX_X);
-            tree.createInRange(maxX + 1, maxX + MAX_X);
+            terrain.createInRange(maxX, maxX + MAX_X);
+            tree.createInRange(maxX, maxX + MAX_X);
             maxX += MAX_X;
             minX -= MIN_X;
             removeInRange(minX, maxX);
         }
         if (avatar.getCenter().x() - windowDimensions.x() < minX){
             System.out.println("in2");
-            terrain.createInRange(minX + MIN_X, minX - 1);
-            tree.createInRange(minX + MIN_X, minX - 1);
+            terrain.createInRange(minX + MIN_X, minX);
+            tree.createInRange(minX + MIN_X, minX);
             maxX -= MAX_X;
             minX += MIN_X;
             removeInRange(minX, maxX);

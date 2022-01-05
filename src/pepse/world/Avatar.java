@@ -31,7 +31,7 @@ public class Avatar extends GameObject{
 
     public Avatar(Vector2 pos, UserInputListener inputListener, ImageReader imageReader) {
 //        super(pos, Vector2.ONES.mult(50), new OvalRenderable(AVATAR_COLOR));
-        super(pos, Vector2.ONES.mult(75),
+        super(pos, Vector2.ONES.mult(65),
                 imageReader.readImage("asset/spongebobStand.png", true));
         this.imageReader = imageReader;
         physics().preventIntersectionsFromDirection(Vector2.ZERO);

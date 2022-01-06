@@ -33,15 +33,18 @@ public class Tree {
     private static final float FALLING_SWAY_CYCLE_LENGTH = 4;
     private final GameObjectCollection gameObjects;
     private final Function<Float, Float> groundHeightAt;
+    private int seed;
     Random rand;
 
-    public Tree(GameObjectCollection gameObjects, Function<Float, Float> groundHeightAt){
+    public Tree(GameObjectCollection gameObjects, Function<Float, Float> groundHeightAt, int seed){
         this.gameObjects = gameObjects;
         this.groundHeightAt = groundHeightAt;
+        this.seed = seed;
+        rand = new Random();
     }
 
     public void setSeed(int seed){
-        rand = new Random(seed);
+        this.seed = seed;
     }
 
 
@@ -62,6 +65,7 @@ public class Tree {
     private void createLeaf(int treeLayer, float x, float y) {
         GameObject leaf = new GameObject(Vector2.of(x, y), Vector2.ONES.mult(SIZE_LEAF),
                 new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR,50)));
+        leaf.setTag("leaf");
         gameObjects.addGameObject(leaf, treeLayer);
 
         //wait j/10 time as we were required in the exercise, then make leaves sway and narrow
@@ -96,8 +100,8 @@ public class Tree {
         leaf.renderer().fadeOut(FADEOUT_TIME, delayedRecreateLeaf(leaf, treeLayer, x, y));
         leaf.transform().setVelocityY(FALL_SPEED);
         new Transition<Float>(leaf, leaf.transform()::setVelocityX, FALLING_SWAY_SPEED, -FALLING_SWAY_SPEED,
-            Transition.CUBIC_INTERPOLATOR_FLOAT
-            , FALLING_SWAY_CYCLE_LENGTH, Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
+            Transition.CUBIC_INTERPOLATOR_FLOAT,
+            FALLING_SWAY_CYCLE_LENGTH, Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
     }
 
     private Runnable delayedRecreateLeaf(GameObject leaf, int treeLayer, float x, float y) {
@@ -116,13 +120,16 @@ public class Tree {
      * @param maxX -
      */
     public void createInRange(int minX, int maxX){
+        //rand.setSeed(seed);
         //normalize X to be integer number that is divided by Block.SIZE
         int normalizeMinX = (minX/Block.SIZE) * Block.SIZE - Block.SIZE;
         int normalizeMaxX = (maxX/Block.SIZE) * Block.SIZE + Block.SIZE;
 
         for (int x = normalizeMinX; x <= normalizeMaxX; x += Block.SIZE){
             //Creates a tree at a probability of 0.1 as requested
-            if(rand.nextInt(10) == 0){
+            rand.setSeed(x); // Reinitialize the random generator using x, so that if the tree is ever
+            // removed and recreated the results will be the same
+            if((rand.nextInt(10))  == 0){
                 // get groundHeightAt(x), normalize to number that is divided by Block.SIZE,
                 // and add the desired extra height to the tree.
                 int extraHeight = rand.nextInt(7) * Block.SIZE;
@@ -141,10 +148,9 @@ public class Tree {
                 new RectangleRenderable(ColorSupplier.approximateColor(TREE_COLOR,20)));
         int layer = Layer.STATIC_OBJECTS;
         // randomly (coin-flip) choose that tree blocks avatar
-        if(rand.nextBoolean()){
+        if(false){//rand.nextBoolean()){
             tree.physics().preventIntersectionsFromDirection(Vector2.ZERO);
             tree.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
-            layer = Layer.STATIC_OBJECTS;
         }
         gameObjects.addGameObject(tree, layer);
 

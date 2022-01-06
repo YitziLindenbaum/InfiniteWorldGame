@@ -8,6 +8,7 @@ import danogl.gui.SoundReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.WindowController;
 import danogl.gui.rendering.Camera;
+import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
 import pepse.world.Avatar;
 import pepse.world.Block;
@@ -24,15 +25,15 @@ import java.util.Random;
 public class PepseGameManager extends GameManager {
 
     private static final int SEED = 100 + new Random().nextInt(50);
-    private static final int MIN_X = -9000;
-    private static final int MAX_X = 9000;
-    private static int minX = MIN_X, maxX = MAX_X;
+    private static final int INIT_MAX_X = 5000;
+    private static final int INIT_MIN_X = -INIT_MAX_X;
+    private static int cur_minX = INIT_MIN_X, cur_maxX = INIT_MAX_X;
     private Terrain terrain;
     private  Avatar avatar;
     private  Tree tree;
     private Vector2 windowDimensions;
 
-    private void removeInRange(int minX, int maxX){
+    private void removeBesidesRange(int minX, int maxX){
         for (GameObject object : gameObjects().objectsInLayer(Layer.STATIC_OBJECTS)){
             if(!object.getTag().equals("tree") && !object.getTag().equals("leaf") &&
                     !object.getTag().equals("ground")) continue;
@@ -50,21 +51,21 @@ public class PepseGameManager extends GameManager {
         super.update(deltaTime);
         //Real world - adding more trees and ground
         //Makes the program slower, we'll probably have to deal with it in another way.
-        if(avatar.getCenter().x() + windowDimensions.x() > maxX){
+        if(avatar.getCenter().x() + windowDimensions.x() > cur_maxX){
             System.out.println("in1");
-            terrain.createInRange(maxX, maxX + MAX_X);
-            tree.createInRange(maxX, maxX + MAX_X);
-            maxX += MAX_X;
-            //minX -= MIN_X;
-            //removeInRange(minX, maxX);
+            terrain.createInRange(cur_maxX, cur_maxX + INIT_MAX_X);
+            tree.createInRange(cur_maxX, cur_maxX + INIT_MAX_X);
+            cur_maxX += INIT_MAX_X;
+            cur_minX -= INIT_MIN_X;
+            removeBesidesRange(cur_minX, cur_maxX);
         }
-        if (avatar.getCenter().x() - windowDimensions.x() < minX){
+        if (avatar.getCenter().x() - windowDimensions.x() < cur_minX){
             System.out.println("in2");
-            terrain.createInRange(minX + MIN_X, minX);
-            tree.createInRange(minX + MIN_X, minX);
-            //maxX -= MAX_X;
-            minX += MIN_X;
-            //removeInRange(minX, maxX);
+            terrain.createInRange(cur_minX + INIT_MIN_X, cur_minX);
+            tree.createInRange(cur_minX + INIT_MIN_X, cur_minX);
+            cur_maxX -= INIT_MAX_X;
+            cur_minX += INIT_MIN_X;
+            removeBesidesRange(cur_minX, cur_maxX);
         }
     }
 
@@ -80,7 +81,7 @@ public class PepseGameManager extends GameManager {
 
         //create terrain
         terrain = new Terrain(gameObjects(),Layer.STATIC_OBJECTS, windowDimensions, SEED);
-        terrain.createInRange(MIN_X, MAX_X);
+        terrain.createInRange(INIT_MIN_X, INIT_MAX_X);
 
         //create night
         Night.create(gameObjects(), Layer.FOREGROUND, windowDimensions, 30);
@@ -94,9 +95,8 @@ public class PepseGameManager extends GameManager {
                 new Color(255,255,0,20));
 
         //create trees
-        tree = new Tree(gameObjects(), terrain::groundHeightAt);
-        tree.setSeed(SEED);
-        tree.createInRange(MIN_X, MAX_X);
+        tree = new Tree(gameObjects(), terrain::groundHeightAt, SEED);
+        tree.createInRange(INIT_MIN_X, INIT_MAX_X);
 
         //set avatar collide with the ground and tree with STATIC_OBJECTS
         gameObjects().layers().shouldLayersCollide(Layer.DEFAULT,Layer.STATIC_OBJECTS,true);
@@ -105,8 +105,11 @@ public class PepseGameManager extends GameManager {
         float midX = windowDimensions.x()/2;
         float y = (float)Math.floor(terrain.groundHeightAt(midX)/Block.SIZE)*Block.SIZE - Block.SIZE -75;
         Vector2 initialAvatarLocation = new Vector2(midX, y);
-        avatar = Avatar.create(gameObjects(), Layer.DEFAULT,initialAvatarLocation,
+        avatar = Avatar.create(gameObjects(), Layer.DEFAULT, initialAvatarLocation,
                 inputListener, imageReader );
+        GameObject marker = new Block(initialAvatarLocation, new RectangleRenderable(Color.RED));
+        gameObjects().addGameObject(marker);
+
 
 
         //set camera following after the avatar

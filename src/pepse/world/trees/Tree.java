@@ -24,19 +24,14 @@ public class Tree {
     public static final Color TREE_COLOR = new Color(100, 50, 20);
     private final GameObjectCollection gameObjects;
     private final Function<Float, Float> groundHeightAt;
-    private int seed;
     Random rand;
 
-    public Tree(GameObjectCollection gameObjects, Function<Float, Float> groundHeightAt, int seed){
+    public Tree(GameObjectCollection gameObjects, Function<Float, Float> groundHeightAt){
         this.gameObjects = gameObjects;
         this.groundHeightAt = groundHeightAt;
-        this.seed = seed;
         rand = new Random();
     }
 
-    public void setSeed(int seed){
-        this.seed = seed;
-    }
 
 
     /**
@@ -45,15 +40,16 @@ public class Tree {
      * @param maxX -
      */
     public void createInRange(int minX, int maxX){
-        //rand.setSeed(seed);
         //normalize X to be integer number that is divided by Block.SIZE
         int normalizeMinX = (minX/Block.SIZE) * Block.SIZE - Block.SIZE;
         int normalizeMaxX = (maxX/Block.SIZE) * Block.SIZE + Block.SIZE;
 
         for (int x = normalizeMinX; x <= normalizeMaxX; x += Block.SIZE){
-            //Creates a tree at a probability of 0.1 as requested
-            rand.setSeed(x); // Reinitialize the random generator using x, so that if the tree is ever
+            // Reinitialize the random generator using x, so that if the tree is ever
             // removed and recreated the results will be the same
+            rand.setSeed(x);
+
+            // Create a tree with probability of 0.1 as requested
             if((rand.nextInt(10))  == 0){
                 // get groundHeightAt(x), normalize to number that is divided by Block.SIZE,
                 // and add the desired extra height to the tree.

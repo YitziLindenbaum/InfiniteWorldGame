@@ -17,8 +17,6 @@ public class Leaves {
 
     private static final float LEAF_SIZE = Block.SIZE * 0.9f;
     public static final Color LEAF_COLOR = new Color(50, 200, 30);
-    public static final int NUM_LEAVES_IN_ROW = 9;
-    public static final int NUM_LEAVES_IN_COL = 9;
     private static final float FADEOUT_TIME = 40;
     private static final float FALL_SPEED = 20;
     private static final float DEAD_TIME = 5;
@@ -29,8 +27,8 @@ public class Leaves {
     private final Random rand;
     private final int rows;
     private final int cols;
-    private float startX;
-    private float startY;
+    private final float startX;
+    private final float startY;
 
 
     public Leaves(GameObjectCollection gameObjects, Random rand, float centerX, float centerY) {
@@ -100,6 +98,7 @@ public class Leaves {
     }
 
     private Runnable delayedRecreateLeaf(GameObject leaf, float x, float y) {
+        // written out for readability, to avoid lambdas-within-lambdas
         Runnable delayedCreator = new Runnable() {
             @Override
             public void run() {

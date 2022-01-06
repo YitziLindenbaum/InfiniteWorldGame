@@ -113,7 +113,7 @@ public class Avatar extends GameObject{
         if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && inputListener.isKeyPressed(KeyEvent.VK_SHIFT) &&
                 energyCounter > 0) {
             //set energy counter - I remove this code to debug
-            //energyCounter -= 0.5f;
+            energyCounter -= 0.5f;
             energyCounterNumeric.renderer().setRenderable(new TextRenderable(String.format(
                     ENERGY_COUNTER_STR, (int)energyCounter)));
             //renderer().setRenderableAngle(45 * renderAngel);

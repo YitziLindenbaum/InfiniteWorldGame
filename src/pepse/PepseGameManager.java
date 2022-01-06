@@ -95,7 +95,7 @@ public class PepseGameManager extends GameManager {
                 new Color(255,255,0,20));
 
         //create trees
-        tree = new Tree(gameObjects(), terrain::groundHeightAt, SEED);
+        tree = new Tree(gameObjects(), terrain::groundHeightAt);
         tree.createInRange(INIT_MIN_X, INIT_MAX_X);
 
         //set avatar collide with the ground and tree with STATIC_OBJECTS

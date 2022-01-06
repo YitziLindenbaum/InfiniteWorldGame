@@ -18,7 +18,7 @@ public class Avatar extends GameObject{
      *
      */
 
-    private static final float VELOCITY_X = 1000;
+    private static final float VELOCITY_X = 400;
     private static final float VELOCITY_Y = -300;
     private static final float GRAVITY = 500;
     private static final Color AVATAR_COLOR = Color.DARK_GRAY;

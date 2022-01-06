@@ -107,8 +107,6 @@ public class PepseGameManager extends GameManager {
         Vector2 initialAvatarLocation = new Vector2(midX, y);
         avatar = Avatar.create(gameObjects(), Layer.DEFAULT, initialAvatarLocation,
                 inputListener, imageReader );
-        GameObject marker = new Block(initialAvatarLocation, new RectangleRenderable(Color.RED));
-        gameObjects().addGameObject(marker);
 
 
 

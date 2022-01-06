@@ -21,20 +21,18 @@ public class Tree {
     public static final int HEIGHT_TREE_FROM_TERRAIN = Block.SIZE * 8;
     public static final Color TREE_COLOR = new Color(100, 50, 20);
     private final GameObjectCollection gameObjects;
-    private final int treeLayer;
     private final Function<Float, Float> groundHeightAt;
-    private final int leafLayer;
-    private final int seed;
-    Random rand;
+    private final int treeLayer;
+    private final int leavesLayer;
+    private final Random rand;
 
-    public Tree(GameObjectCollection gameObjects, int treeLayer, Function<Float, Float> groundHeightAt,
-                int leafLayer, int seed){
+    public Tree(GameObjectCollection gameObjects, Function<Float, Float> groundHeightAt,
+                int treeLayer, int leavesLayer){
         this.gameObjects = gameObjects;
-        this.treeLayer = treeLayer;
         this.groundHeightAt = groundHeightAt;
-        this.leafLayer = leafLayer;
-        this.seed = seed;
         rand = new Random();
+        this.treeLayer = treeLayer;
+        this.leavesLayer = leavesLayer;
     }
 
 
@@ -52,7 +50,7 @@ public class Tree {
         for (int x = normalizeMinX; x <= normalizeMaxX; x += Block.SIZE){
             // Reinitialize the random generator using x, so that if the tree is ever
             // removed and recreated the results will be the same
-            rand.setSeed(Objects.hash(x, seed));
+            rand.setSeed(x);
 
             // Create a tree with probability of 0.1 as requested
             if((rand.nextInt(10))  == 0){
@@ -81,6 +79,6 @@ public class Tree {
 
         tree.setTag("tree");
 
-        new Leaves(gameObjects, rand, x, y, leafLayer).createLeaves();
+        new Leaves(gameObjects, rand, x, y, leavesLayer).createLeaves();
     }
 }

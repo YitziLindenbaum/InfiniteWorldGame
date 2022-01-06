@@ -27,6 +27,14 @@ public class PepseGameManager extends GameManager {
     private static final int SEED = 100 + new Random().nextInt(50);
     private static final int INIT_MAX_X = 5000;
     private static final int INIT_MIN_X = -INIT_MAX_X;
+    public static final int SKY_LAYER = Layer.BACKGROUND;
+    public static final int GROUND_LAYER = Layer.STATIC_OBJECTS;
+    public static final int NIGHT_LAYER = Layer.FOREGROUND;
+    public static final int SUN_LAYER = Layer.BACKGROUND + 1;
+    public static final int SUN_HALO_LAYER = Layer.BACKGROUND + 10;
+    public static final int TREE_LAYER = Layer.STATIC_OBJECTS + 10;
+    public static final int LEAVES_LAYER = Layer.STATIC_OBJECTS + 50;
+    public static final int AVATR_LAYER = Layer.DEFAULT;
     private static int cur_minX = INIT_MIN_X, cur_maxX = INIT_MAX_X;
     private Terrain terrain;
     private Avatar avatar;
@@ -77,46 +85,47 @@ public class PepseGameManager extends GameManager {
         windowDimensions = windowController.getWindowDimensions();
 
         //create sky
-        Sky.create(gameObjects(), windowDimensions, Layer.BACKGROUND);
+        Sky.create(gameObjects(),windowDimensions, SKY_LAYER);
 
         //create terrain
-        int terrainLayer = Layer.STATIC_OBJECTS;
-        terrain = new Terrain(gameObjects(), terrainLayer, windowDimensions, SEED);
+        terrain = new Terrain(gameObjects(), GROUND_LAYER, windowDimensions, SEED);
         terrain.createInRange(INIT_MIN_X, INIT_MAX_X);
 
         //create night
-        Night.create(gameObjects(), Layer.FOREGROUND, windowDimensions, 30);
+        Night.create(gameObjects(), NIGHT_LAYER, windowDimensions, 30);
 
         //create sun
-        GameObject sun = Sun.create(gameObjects(), Layer.BACKGROUND + 1,
-            windowDimensions, 30);
+        GameObject sun = Sun.create(gameObjects(), SUN_LAYER,
+                windowDimensions, 30);
 
         //create sun halo
-        SunHalo.create(gameObjects(), Layer.BACKGROUND + 10, sun,
-            new Color(255, 255, 0, 20));
+        SunHalo.create(gameObjects(), SUN_HALO_LAYER, sun,
+                new Color(255,255,0,20));
 
         //create trees
-        int treeLayer = Layer.STATIC_OBJECTS;
-        int leafLayer = Layer.STATIC_OBJECTS;
-        tree = new Tree(gameObjects(), treeLayer, terrain::groundHeightAt, leafLayer, SEED);
+        tree = new Tree(gameObjects(), terrain::groundHeightAt, TREE_LAYER, LEAVES_LAYER);
         tree.createInRange(INIT_MIN_X, INIT_MAX_X);
 
-        gameObjects().layers().shouldLayersCollide(Layer.DEFAULT, Layer.STATIC_OBJECTS, true);
 
         //set avatar collide with the ground and tree with STATIC_OBJECTS
+        gameObjects().layers().shouldLayersCollide(AVATR_LAYER, GROUND_LAYER,true);
+        gameObjects().layers().shouldLayersCollide(AVATR_LAYER, TREE_LAYER,true);
+        gameObjects().layers().shouldLayersCollide(LEAVES_LAYER, GROUND_LAYER, true);
+
         //create avatar
         float midX = windowDimensions.x() / 2;
         float y =
             (float) Math.floor(terrain.groundHeightAt(midX) / Block.SIZE) * Block.SIZE - Block.SIZE - 75;
         Vector2 initialAvatarLocation = new Vector2(midX, y);
-        avatar = Avatar.create(gameObjects(), Layer.DEFAULT, initialAvatarLocation,
-            inputListener, imageReader);
+        avatar = Avatar.create(gameObjects(), AVATR_LAYER, initialAvatarLocation,
+                inputListener, imageReader );
+
 
 
         //set camera following after the avatar
         Camera camera = new Camera(avatar, windowDimensions.mult(0.5f).add(initialAvatarLocation.mult(-1)),
-            windowController.getWindowDimensions(),
-            windowController.getWindowDimensions());
+                windowController.getWindowDimensions(),
+                windowController.getWindowDimensions());
 
         //create energyCounter
         avatar.createEnergyCounter(gameObjects(), camera);

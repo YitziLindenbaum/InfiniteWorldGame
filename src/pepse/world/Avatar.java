@@ -152,6 +152,7 @@ public class Avatar extends GameObject{
         gameObjects.addGameObject(avatar, layer);
         avatar.physics().preventIntersectionsFromDirection(Vector2.ZERO);
         avatar.physics().setMass(-GameObjectPhysics.IMMOVABLE_MASS);
+        avatar.setTag("avatar");
         return avatar;
 
     }

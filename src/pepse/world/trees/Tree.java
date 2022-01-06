@@ -2,16 +2,14 @@ package pepse.world.trees;
 
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
-import danogl.collisions.Layer;
 import danogl.components.GameObjectPhysics;
-import danogl.components.ScheduledTask;
-import danogl.components.Transition;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
 import pepse.util.ColorSupplier;
 import pepse.world.Block;
 
 import java.awt.*;
+import java.util.Objects;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -23,12 +21,19 @@ public class Tree {
     public static final int HEIGHT_TREE_FROM_TERRAIN = Block.SIZE * 8;
     public static final Color TREE_COLOR = new Color(100, 50, 20);
     private final GameObjectCollection gameObjects;
+    private final int treeLayer;
     private final Function<Float, Float> groundHeightAt;
+    private final int leafLayer;
+    private final int seed;
     Random rand;
 
-    public Tree(GameObjectCollection gameObjects, Function<Float, Float> groundHeightAt){
+    public Tree(GameObjectCollection gameObjects, int treeLayer, Function<Float, Float> groundHeightAt,
+                int leafLayer, int seed){
         this.gameObjects = gameObjects;
+        this.treeLayer = treeLayer;
         this.groundHeightAt = groundHeightAt;
+        this.leafLayer = leafLayer;
+        this.seed = seed;
         rand = new Random();
     }
 
@@ -47,7 +52,7 @@ public class Tree {
         for (int x = normalizeMinX; x <= normalizeMaxX; x += Block.SIZE){
             // Reinitialize the random generator using x, so that if the tree is ever
             // removed and recreated the results will be the same
-            rand.setSeed(x);
+            rand.setSeed(Objects.hash(x, seed));
 
             // Create a tree with probability of 0.1 as requested
             if((rand.nextInt(10))  == 0){
@@ -72,10 +77,10 @@ public class Tree {
             tree.physics().preventIntersectionsFromDirection(Vector2.ZERO);
             tree.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
         }
-        gameObjects.addGameObject(tree, Layer.STATIC_OBJECTS);
+        gameObjects.addGameObject(tree, treeLayer);
 
         tree.setTag("tree");
 
-        new Leaves(gameObjects, rand, x, y).createLeaves();
+        new Leaves(gameObjects, rand, x, y, leafLayer).createLeaves();
     }
 }

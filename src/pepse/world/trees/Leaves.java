@@ -29,9 +29,10 @@ public class Leaves {
     private final int cols;
     private final float startX;
     private final float startY;
+    private final int layer;
 
 
-    public Leaves(GameObjectCollection gameObjects, Random rand, float centerX, float centerY) {
+    public Leaves(GameObjectCollection gameObjects, Random rand, float centerX, float centerY, int layer) {
 
         this.gameObjects = gameObjects;
         this.rand = rand;
@@ -39,13 +40,10 @@ public class Leaves {
         cols = 5 + 2 * rand.nextInt(3);
         this.startX = centerX - ((rows - 1) / 2f  * LEAF_SIZE);
         this.startY = centerY - ((cols - 1) / 2f  * LEAF_SIZE);
+        this.layer = layer;
     }
 
-    /**
-     * create leaves
-     * @param startX -
-     * @param startY -
-     */
+
     public void createLeaves(){
         for(float row = 0, x = startX; row < rows; row++, x += LEAF_SIZE){
             for (float col = 0, y = startY; col < cols; col++, y += LEAF_SIZE){
@@ -59,7 +57,7 @@ public class Leaves {
         GameObject leaf = new GameObject(Vector2.of(x, y), Vector2.ONES.mult(LEAF_SIZE),
             new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR,50)));
         leaf.setTag("leaf");
-        gameObjects.addGameObject(leaf, Layer.STATIC_OBJECTS);
+        gameObjects.addGameObject(leaf, layer);
 
         //wait j/10 time as we were required in the exercise, then make leaves sway and narrow
         float waitTime = leaf.getTopLeftCorner().y() % 10;

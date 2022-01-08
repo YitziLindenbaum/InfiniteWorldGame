@@ -12,6 +12,7 @@ import pepse.world.Block;
 
 import java.awt.*;
 import java.util.Random;
+import java.util.function.Function;
 
 public class Leaves {
 
@@ -30,9 +31,11 @@ public class Leaves {
     private final float startX;
     private final float startY;
     private final int leavesLayer;
+    private final Function<Float, Float> groundHeightAt;
 
 
-    public Leaves(GameObjectCollection gameObjects, Random rand, float centerX, float centerY, int leavesLayer) {
+    public Leaves(GameObjectCollection gameObjects, Random rand,
+                  float centerX, float centerY, int leavesLayer, Function<Float, Float> groundHeightAt) {
 
         this.gameObjects = gameObjects;
         this.rand = rand;
@@ -41,6 +44,7 @@ public class Leaves {
         this.startX = centerX - ((rows - 1) / 2f  * LEAF_SIZE);
         this.startY = centerY - ((cols - 1) / 2f  * LEAF_SIZE);
         this.leavesLayer = leavesLayer;
+        this.groundHeightAt = groundHeightAt;
     }
 
     /**
@@ -50,31 +54,37 @@ public class Leaves {
         for(float row = 0, x = startX; row < rows; row++, x += LEAF_SIZE){
             for (float col = 0, y = startY; col < cols; col++, y += LEAF_SIZE){
                 //create new game object
-                createLeaf(x, y);
+                createLeaf(x, y, null);
             }
         }
     }
 
-    private void createLeaf(float x, float y) {
-        Leaf leaf = new Leaf(Vector2.of(x, y), Vector2.ONES.mult(LEAF_SIZE),
-            new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR,50)),
-                gameObjects, leavesLayer);
-        leaf.setTag("leaf");
-        gameObjects.addGameObject(leaf, leavesLayer);
+    private void createLeaf(float x, float y, Leaf leaf) {
+        Leaf newLeaf;
+        if(leaf == null){
+            newLeaf = new Leaf(new Vector2(x,y), gameObjects, leavesLayer, rand);
+            newLeaf.setTag("leaf");
+            gameObjects.addGameObject(newLeaf, leavesLayer);
+        }
+        else {
+            newLeaf = leaf;
+            newLeaf.setTopLeftCorner(Vector2.of(x, y));
+            newLeaf.renderer().fadeIn(0);
 
+        }
         //wait j/10 time as we were required in the exercise, then make leaves sway and narrow
-        float waitTime = leaf.getTopLeftCorner().y() % 10;
-        new ScheduledTask(leaf, waitTime, false, () -> {
-            sway(leaf);
-            narrow(leaf);
+        float waitTime = newLeaf.getTopLeftCorner().y() % 10; // ????
+        new ScheduledTask(newLeaf, waitTime, false, () -> {
+            sway(newLeaf);
+            narrow(newLeaf);
         });
 
         // control leaf life-cycle
-        new ScheduledTask(leaf, MAX_LEAF_LIFE * rand.nextFloat(), false,
-            () -> fall(leaf, x, y));
+        new ScheduledTask(newLeaf, MAX_LEAF_LIFE * rand.nextFloat(), false,
+            () -> fall(newLeaf, x, y));
     }
 
-    private void sway(GameObject leaf) {
+    private void sway(Leaf leaf) {
         new Transition<Float>(leaf, leaf.renderer()::setRenderableAngle,
             //choose random degree in range [-30 - 30]
             -30 * rand.nextFloat(), 30 * rand.nextFloat(),
@@ -82,7 +92,7 @@ public class Leaves {
             Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
     }
 
-    private void narrow(GameObject leaf) {
+    private void narrow(Leaf leaf) {
         new Transition<Vector2>(leaf, leaf::setDimensions,
             //Change leaves width to be at a minimum 0.8 * SIZE_LEAF
             Vector2.ONES.mult(LEAF_SIZE), Vector2.of(LEAF_SIZE * 0.8f, LEAF_SIZE),
@@ -90,22 +100,23 @@ public class Leaves {
             Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
     }
 
-    private void fall(GameObject leaf, float x, float y) {
+
+    private void fall(Leaf leaf, float x, float y) {
         leaf.renderer().fadeOut(FADEOUT_TIME, delayedRecreateLeaf(leaf, x, y));
         leaf.transform().setVelocityY(FALL_SPEED);
         new Transition<Float>(leaf, leaf.transform()::setVelocityX, FALLING_SWAY_SPEED, -FALLING_SWAY_SPEED,
             Transition.CUBIC_INTERPOLATOR_FLOAT,
             FALLING_SWAY_CYCLE_LENGTH, Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);
+
     }
 
-    private Runnable delayedRecreateLeaf(GameObject leaf, float x, float y) {
+    private Runnable delayedRecreateLeaf(Leaf leaf, float x, float y) {
         // written out for readability, to avoid lambdas-within-lambdas
-        Runnable delayedCreator = new Runnable() {
+        return new Runnable() {
             @Override
             public void run() {
-                new ScheduledTask(leaf, DEAD_TIME, false, () -> createLeaf(x, y));
+                new ScheduledTask(leaf, DEAD_TIME, false, () -> createLeaf(x, y, leaf));
             }
         };
-        return delayedCreator;
     }
 }

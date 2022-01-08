@@ -110,7 +110,8 @@ public class PepseGameManager extends GameManager {
      */
     @Override
     public void initializeGame(ImageReader imageReader, SoundReader soundReader,
-                               UserInputListener inputListener, WindowController windowController) {
+                               UserInputListener inputListener,
+                               WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
 
         System.out.println(SEED);

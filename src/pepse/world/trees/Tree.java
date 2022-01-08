@@ -104,7 +104,7 @@ public class Tree {
     /**
      * create leaves
      */
-    public void createLeaves(int startX, int startY, int rows, int cols){
+    private void createLeaves(int startX, int startY, int rows, int cols){
         for(float row = 0, x = startX; row < rows; row++, x += Leaf.LEAF_SIZE){
             for (float col = 0, y = startY; col < cols; col++, y += Leaf.LEAF_SIZE){
                 //create new game object

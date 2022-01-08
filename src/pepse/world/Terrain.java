@@ -41,9 +41,8 @@ public class Terrain{
      * @param windowDimensions -window dimensions
      * @param seed - seed to the random
      */
-    public Terrain(GameObjectCollection gameObjects,
-                   int groundLayer, Vector2 windowDimensions,
-                   int seed) {
+    public Terrain(GameObjectCollection gameObjects, int groundLayer,
+                   Vector2 windowDimensions, int seed) {
         this.gameObjects = gameObjects;
         this.groundLayer = groundLayer;
         GROUND_LAYER = groundLayer + 1; //set the ground layer of the block that not in the first layer

@@ -159,7 +159,8 @@ public class Avatar extends GameObject{
      * @param imageReader - image reader
      * @return avatar
      */
-    public static Avatar create(GameObjectCollection gameObjects, int layer, Vector2 topLeftCorner,
+    public static Avatar create(GameObjectCollection gameObjects,
+                                int layer, Vector2 topLeftCorner,
                                 UserInputListener inputListener, ImageReader imageReader){
         Avatar avatar = new Avatar(topLeftCorner, inputListener, imageReader ,gameObjects);
         gameObjects.addGameObject(avatar, layer);

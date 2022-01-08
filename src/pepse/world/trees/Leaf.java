@@ -49,8 +49,7 @@ public class Leaf extends GameObject{
      * @param leavesLayer - leaf layer
      * @param rand - random
      */
-    public Leaf(Vector2 topLeftCorner,
-                GameObjectCollection gameObjects,
+    public Leaf(Vector2 topLeftCorner, GameObjectCollection gameObjects,
                 int leavesLayer, Random rand) {
         super(topLeftCorner, Vector2.ONES.mult(LEAF_SIZE),
                 new RectangleRenderable(ColorSupplier.approximateColor(LEAF_COLOR, LEAF_COLOR_DELTA)));

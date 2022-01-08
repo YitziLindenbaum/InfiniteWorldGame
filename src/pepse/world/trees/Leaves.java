@@ -35,7 +35,8 @@ public class Leaves {
 
 
     public Leaves(GameObjectCollection gameObjects, Random rand,
-                  float centerX, float centerY, int leavesLayer, Function<Float, Float> groundHeightAt) {
+                  float centerX, float centerY, int leavesLayer,
+                  Function<Float, Float> groundHeightAt) {
 
         this.gameObjects = gameObjects;
         this.rand = rand;

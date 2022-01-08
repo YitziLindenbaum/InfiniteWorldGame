@@ -7,6 +7,7 @@ import danogl.gui.ImageReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.rendering.*;
 import danogl.util.Vector2;
+import pepse.util.EnergyCounter;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

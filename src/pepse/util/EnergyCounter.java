@@ -1,4 +1,4 @@
-package pepse.world;
+package pepse.util;
 
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;

@@ -10,15 +10,16 @@ import pepse.util.EnergyCounter;
 
 import java.awt.event.KeyEvent;
 
+/**
+ * Represents the "sidekick" avatar.
+ */
 public class MockAvatar extends Avatar{
-    //private GameObjectCollection gameObjects;
     /**
-     * Create a new Avatar object.
-     *
+     * Create a new MockAvatar object.
      * @param pos           - top left corner of avatar
      * @param inputListener - input from user
      * @param imageReader   - image reader
-     * @param gameObject    - game objects
+     * @param gameObject    - GameObjectCollection to which to add.
      */
     public MockAvatar(Vector2 pos, UserInputListener inputListener, ImageReader imageReader,
                       GameObjectCollection gameObject, Avatar avatar) {
@@ -28,7 +29,11 @@ public class MockAvatar extends Avatar{
         //this.gameObjects = gameObject;
     }
 
+
+    /**
+     * Override method that handles the mock avatar, so that the mock avatar cannot create another mock
+     * avatar.
+     */
     @Override
-    protected void handleMockAvatar() {
-    }
+    protected void handleMockAvatar() {}
 }

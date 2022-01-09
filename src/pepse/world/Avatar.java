@@ -40,7 +40,8 @@ public class Avatar extends GameObject{
     protected EnergyCounter energyCounterNumeric;
     protected GameObjectCollection gameObjects;
     private final ImageReader imageReader;
-    private final AnimationRenderable animation;
+    protected AnimationRenderable animation;
+    protected ImageRenderable standAnimation;
     private boolean isMockAvatarInGame = false;
     private MockAvatar mockAvatar;
 
@@ -71,6 +72,7 @@ public class Avatar extends GameObject{
                 this.imageReader.readImage(SPONGEBOB_WALK_RIGHT_IMG_4_PATH, true),
                 this.imageReader.readImage(SPONGEBOB_WALK_RIGHT_IMG_5_PATH, true)
         }, TIME_BETWEEN_CLIPS);
+        this.standAnimation = imageReader.readImage(SPONGEBOB_STAND_PATH, true);
         renderer().setRenderable(animation);
     }
 
@@ -108,7 +110,7 @@ public class Avatar extends GameObject{
 
         if (transform().getVelocity().x() == ZERO_VEL && transform().getVelocity().y() == ZERO_VEL){
             renderer().setRenderableAngle(ZERO_ANGLE);
-            renderer().setRenderable(imageReader.readImage(SPONGEBOB_STAND_PATH, true));
+            renderer().setRenderable(standAnimation);
         }
     }
 

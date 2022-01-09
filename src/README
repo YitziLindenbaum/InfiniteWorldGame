@@ -52,5 +52,6 @@ life-cycles, so they needed to be able to add and remove leaves themselves.
 Bonuses
 Spongebob is our favorite TA, so we made the avatar look like him.
 At the last second, we decided to add an option for a "mock avatar" - like in some video games, where the
-main avatar has a sidekick that follows them around. The mock avatar is added and deleted at the press of
-the 'p' key, since (naturally) the mock avatar is in the likeness of our other favorite TA, Patrick.
+main avatar has a sidekick that follows them around. The mock avatar is added at the press of the 'p' key,
+since (naturally) the mock avatar is in the likeness of our other favorite TA, Patrick. It is deleted at
+the press of the 'd' key.

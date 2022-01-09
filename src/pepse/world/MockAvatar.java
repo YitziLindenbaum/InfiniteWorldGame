@@ -36,4 +36,16 @@ public class MockAvatar extends Avatar{
      */
     @Override
     protected void handleMockAvatar() {}
+
+    /**
+     * Override method that increases energy so that mock avatar doesn't increase energy.
+     */
+    @Override
+    protected void increaseEnergy() {}
+
+    /**
+     * Override method that increases energy so that mock avatar doesn't decrease energy.
+     */
+    @Override
+    protected void decreaseEnergy() {}
 }

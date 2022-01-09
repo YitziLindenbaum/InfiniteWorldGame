@@ -136,7 +136,7 @@ public class Avatar extends GameObject{
         if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && inputListener.isKeyPressed(KeyEvent.VK_SHIFT) &&
                 energyCounterNumeric.getEnergy() > EnergyCounter.MIN_ENERGY_VALUE) {
             //set energy counter - I remove this code to debug
-            energyCounterNumeric.decrease();
+            decreaseEnergy();
             transform().setVelocityY(VELOCITY_Y);
             this.physics().preventIntersectionsFromDirection(Vector2.ZERO);
             return;
@@ -152,7 +152,7 @@ public class Avatar extends GameObject{
         }
 
         if (transform().getVelocity().y() == ZERO_VEL){
-            energyCounterNumeric.increase();
+            increaseEnergy();
         }
 
         handleMockAvatar();
@@ -160,12 +160,26 @@ public class Avatar extends GameObject{
     }
 
     /**
-     *
+     * Increases energy by 0.5. (Note: these methods are extracted to allow override by MockAvatar.)
+     */
+    protected void increaseEnergy() {
+        energyCounterNumeric.increase();
+    }
+
+    /**
+     * Decreases energy by 0.5.
+     */
+    protected void decreaseEnergy() {
+        energyCounterNumeric.decrease();
+    }
+
+    /**
+     * Handles the creation and removal of the sidekick.
      */
     protected void handleMockAvatar() {
         if(inputListener.isKeyPressed(KeyEvent.VK_P) && !isMockAvatarInGame){
-            Vector2 pos = new Vector2(getTopLeftCorner().x() + 30f, getTopLeftCorner().y());
-            mockAvatar = new MockAvatar(pos, inputListener, imageReader,gameObjects, this);
+            Vector2 pos = getTopLeftCorner().add(Vector2.of(30f, 0));
+            mockAvatar = new MockAvatar(pos, inputListener, imageReader, gameObjects, this);
             gameObjects.addGameObject(mockAvatar, Layer.DEFAULT);
             isMockAvatarInGame = true;
         }

@@ -8,6 +8,9 @@ import danogl.util.Vector2;
 
 import java.awt.*;
 
+/**
+ * Handles the sun's halo in the game's world.
+ */
 public class SunHalo {
 
     private static final int SUN_HALO_SIZE = 300;

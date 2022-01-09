@@ -13,6 +13,9 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.function.Function;
 
+/**
+ * Handles creation of trees in world.
+ */
 public class Tree {
 
     private static final int HEIGHT_TREE_FROM_TERRAIN = Block.SIZE * 8;
@@ -32,9 +35,17 @@ public class Tree {
     private final int treeLayer;
     private final int leavesLayer;
     private final int seed;
-    private Random rand;
+    private Random rand = new Random();
 
 
+    /**
+     * Create a new Tree object
+     * @param gameObjects GameObjectCollection to which to add trees
+     * @param groundHeightAt callback to know where ground is at given x coordinate
+     * @param treeLayer Layer in which to place trees
+     * @param leavesLayer Layer in which to place leaves
+     * @param seed for Randomizer
+     */
     public Tree(GameObjectCollection gameObjects, Function<Float, Float> groundHeightAt,
                 int treeLayer, int leavesLayer, int seed){
         this.gameObjects = gameObjects;
@@ -59,11 +70,11 @@ public class Tree {
         for (int x = normalizeMinX; x <= normalizeMaxX; x += Block.SIZE){
             // Reinitialize the random generator using x, so that if the tree is ever
             // removed and recreated the results will be the same
-            rand = new Random(x + seed);
+            rand.setSeed(x + seed);
 
             // Create a tree with probability of 0.1 as requested
             if((rand.nextInt(CHANGE_TO_CREATE))  == DESIRED_RESULT){
-                // get groundHeightAt(x), normalize to number that is divided by Block.SIZE,
+                // get groundHeightAt(x), normalize to number that is divisible by Block.SIZE,
                 // and add the desired extra height to the tree.
                 int extraHeight = rand.nextInt(BOUND_TREE_HEIGHT) * Block.SIZE;
                 float y = (float) Math.floor(groundHeightAt.apply((float) x) / Block.SIZE) * Block.SIZE -
@@ -76,7 +87,7 @@ public class Tree {
     }
 
     /**
-     *
+     * Create a single tree
      * @param x top left corner x
      * @param y top left corner y
      * @param extraHeight - height
@@ -102,13 +113,17 @@ public class Tree {
     }
 
     /**
-     * create leaves
+     * Creates leaves at the given coordinates of the given size.
+     * @param startX x coordinate of top left corner of block of leaves
+     * @param startY y coordinate of the same
+     * @param rows Number of rows of leaves
+     * @param cols Number of columns of leaves
      */
     private void createLeaves(int startX, int startY, int rows, int cols){
         for(float row = 0, x = startX; row < rows; row++, x += Leaf.LEAF_SIZE){
             for (float col = 0, y = startY; col < cols; col++, y += Leaf.LEAF_SIZE){
                 //create new game object
-                new Leaf(new Vector2(x, y), gameObjects, leavesLayer, rand);
+                new Leaf(Vector2.of(x, y), gameObjects, leavesLayer, rand);
             }
         }
     }

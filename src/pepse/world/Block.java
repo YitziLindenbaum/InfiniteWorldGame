@@ -6,6 +6,9 @@ import danogl.components.GameObjectPhysics;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
+/**
+ * A GameObject with basic preset block-like features.
+ */
 public class Block extends GameObject{
     public static final int SIZE = 30;
 

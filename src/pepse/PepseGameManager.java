@@ -19,6 +19,9 @@ import pepse.world.trees.Tree;
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * Manages PEPSE game.
+ */
 public class PepseGameManager extends GameManager {
 
     private static final int SEED = 100 + new Random().nextInt(50);
@@ -43,7 +46,7 @@ public class PepseGameManager extends GameManager {
     private Vector2 windowDimensions;
 
     /**
-     * responsible for remove all the objects that beside the range of the game
+     * Responsible for remove all the objects that beside the range of the game
      * @param minX of range of the game
      * @param maxX of range of the game
      */
@@ -77,7 +80,7 @@ public class PepseGameManager extends GameManager {
     }
 
     /**
-     * deal with the real world
+     * Run once per frame.
      * @param deltaTime -
      */
     @Override
@@ -165,6 +168,10 @@ public class PepseGameManager extends GameManager {
 
     }
 
+    /**
+     * Main funtion to run program.
+     * @param args
+     */
     public static void main(String[] args) {
 
         new PepseGameManager().run();

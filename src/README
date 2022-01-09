@@ -44,6 +44,9 @@ that uses pi and e to create an unpredictable but smooth function, and we went w
 end did we get around to putting it in its own class.
 The infinite world created some runtime problems - but cleverly playing with the radius that the game
 manager holds around the avatar yielded reasonable results.
+We also tried to avoid passing the Leaf objects the gameObjectCollection, since normally objects are not
+responsible for adding themselves. But we found that it would be easiest if the leaves controlled their own
+life-cycles, so they needed to be able to add and remove leaves themselves.
 
 
 Bonuses

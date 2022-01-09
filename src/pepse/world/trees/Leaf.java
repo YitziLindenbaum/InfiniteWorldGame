@@ -41,7 +41,7 @@ public class Leaf extends GameObject{
     //leaf variables
     private static GameObjectCollection gameObjects;
     private static int leafLayer;
-    private static Random rand;
+    private final Random rand;
     private Transition<Float> horizontalTransition;
     private final Vector2 topLeftCorner;
 
@@ -61,8 +61,8 @@ public class Leaf extends GameObject{
         gameObjects.addGameObject(this, leavesLayer);
         Leaf.gameObjects = gameObjects;
         Leaf.leafLayer = leavesLayer;
-        Leaf.rand = rand;
-        this.topLeftCorner = new Vector2(topLeftCorner.x(),topLeftCorner.y());
+        this.rand = rand;
+        this.topLeftCorner = topLeftCorner;//new Vector2(topLeftCorner.x(),topLeftCorner.y());
         //wait j/10 time as we were required in the exercise, then make leaves sway and narrow
         float waitTime = getTopLeftCorner().y() % WAIT_PARAMETER;
         new ScheduledTask(this, waitTime, false, () -> {

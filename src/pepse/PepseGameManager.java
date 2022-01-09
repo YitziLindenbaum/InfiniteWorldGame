@@ -182,7 +182,7 @@ public class PepseGameManager extends GameManager {
 
 
     /**
-     * Main funtion to run program.
+     * Main function to run program.
      * @param args
      */
     public static void main(String[] args) {

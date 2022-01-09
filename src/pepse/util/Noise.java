@@ -3,15 +3,22 @@ package pepse.util;
 import java.util.Random;
 import java.util.function.Function;
 
+/**
+ * Responsible for providing smooth noise function for Terrain.
+ */
 public class Noise {
-    //noise method constants
+
     private static final float NORMALIZE_PARAMETER = 1.1f;
     private static final float RANGE_NOISE = 10f;
-    private static final float[] P_NOISE = {-1.5f, -1.4f, -1.3f, -1.2f, -1.2f, -1.1f, -1.0f, -0.9f, -0.8f, -0.7f, -0.6f,
-            1.5f, 1.4f, 1.3f, 1.2f, 1.2f, 1.1f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f};
+    private static final float[] P_NOISE = {-1.5f, -1.4f, -1.3f, -1.2f, -1.2f, -1.1f, -1.0f, -0.9f, -0.8f,
+        -0.7f, -0.6f, 1.5f, 1.4f, 1.3f, 1.2f, 1.2f, 1.1f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f};
     private static final float[] P_FACTOR_TOTAL_NOISE = {-0.1f, 0.1f};
+
     /**
-     * set noise to be sin function with random parameters that make the ground to be non-permanent
+     * @param seed For Random generator.
+     * @param dimY Altitude for trigonometric functions
+     * @param dimX
+     * @return smooth noise function
      */
     public static Function<Float, Float> generateNoiseFunc(int seed, float dimY, float dimX) {
 
@@ -35,8 +42,7 @@ public class Noise {
 
         float totalFactor = pFactorTotal[rand.nextInt(pFactorTotal.length)] * rangeFactor;
 
-
-        return (Float x) -> NORMALIZE_PARAMETER * dimY + totalFactor * (float) (factor1 * Math.sin(scala1 * x) +
-                factorE * Math.sin(scalaE * Math.E * x) + factorPi * Math.sin(scalaPi * Math.PI * x));
+        return (Float x) -> NORMALIZE_PARAMETER * dimY + totalFactor * (float) (factor1 * Math.sin(scala1 * x)
+            + factorE * Math.sin(scalaE * Math.E * x) + factorPi * Math.sin(scalaPi * Math.PI * x));
     }
 }

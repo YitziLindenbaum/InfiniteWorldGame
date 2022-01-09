@@ -12,6 +12,9 @@ import pepse.util.EnergyCounter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+/**
+ * Represents the avatar in the game.
+ */
 public class Avatar extends GameObject{
     private static final float VELOCITY_X = 300;
     private static final float VELOCITY_Y = -300;
@@ -38,7 +41,7 @@ public class Avatar extends GameObject{
     private final AnimationRenderable animation;
 
     /**
-     * avatar constructor
+     * Create a new Avatar object.
      * @param pos - top left corner of avatar
      * @param inputListener - input from user
      * @param imageReader - image reader

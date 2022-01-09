@@ -13,9 +13,12 @@ import pepse.world.Block;
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * Represents leaves on trees.
+ */
 public class Leaf extends GameObject{
 
-    //constant
+    //constants
     public static final float LEAF_SIZE = Block.SIZE * 0.9f;
     public static final Color LEAF_COLOR = new Color(50, 200, 30);
     private static final float FADEOUT_TIME = 40;
@@ -43,7 +46,7 @@ public class Leaf extends GameObject{
     private final Vector2 topLeftCorner;
 
     /**
-     * constructor - create leaf
+     * Create a new Leaf object
      * @param topLeftCorner of the leaf
      * @param gameObjects - all objects in the game
      * @param leavesLayer - leaf layer

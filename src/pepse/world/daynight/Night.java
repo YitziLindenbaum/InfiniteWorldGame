@@ -11,6 +11,9 @@ import danogl.util.Vector2;
 
 import java.awt.*;
 
+/**
+ * Handle the color of the backround to simulate darkness.
+ */
 public class Night {
     private static final Float NOON_OPACITY = 0f;
     private static final Float MIDNIGHT_OPACITY = 0.5f;

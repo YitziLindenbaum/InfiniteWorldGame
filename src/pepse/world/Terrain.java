@@ -9,8 +9,10 @@ import java.awt.*;
 import java.util.Random;
 import java.util.function.Function;
 
-
-public class Terrain{
+/**
+ * Responsible for creating/placing terrain in world.
+ */
+public class Terrain {
     private static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
     private static final int TERRAIN_DEPTH = 20;
     public static final String GROUND_TAG = "ground";
@@ -19,8 +21,9 @@ public class Terrain{
     //noise method constants
     private static final float NORMALIZE_PARAMETER = 1.1f;
     private static final float RANGE_NOISE = 10f;
-    private static final float[] P_NOISE = {-1.5f, -1.4f, -1.3f, -1.2f, -1.2f, -1.1f, -1.0f, -0.9f, -0.8f, -0.7f, -0.6f,
-            1.5f, 1.4f, 1.3f, 1.2f, 1.2f, 1.1f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f};
+    private static final float[] P_NOISE = {-1.5f, -1.4f, -1.3f, -1.2f, -1.2f, -1.1f, -1.0f, -0.9f, -0.8f,
+        -0.7f, -0.6f,
+        1.5f, 1.4f, 1.3f, 1.2f, 1.2f, 1.1f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f};
     public static final float[] P_FACTOR_TOTAL_NOISE = {-0.1f, 0.1f};
 
     public static int GROUND_LAYER; //it's public to use in the game manager
@@ -35,11 +38,12 @@ public class Terrain{
 
 
     /**
-     * constructor
-     * @param gameObjects - game objects
-     * @param groundLayer - ground layer
+     * Create a new Terrain object.
+     *
+     * @param gameObjects      - game objects
+     * @param groundLayer      - ground layer
      * @param windowDimensions -window dimensions
-     * @param seed - seed to the random
+     * @param seed             - seed to the random
      */
     public Terrain(GameObjectCollection gameObjects, int groundLayer,
                    Vector2 windowDimensions, int seed) {
@@ -56,6 +60,7 @@ public class Terrain{
 
     /**
      * ground height at x
+     *
      * @param x coordinate
      * @return height at x - such that fit to the noise function
      */
@@ -65,24 +70,24 @@ public class Terrain{
 
     /**
      * create blocks in range
+     *
      * @param minX - the minimal x to start to create the ground
      * @param maxX - the maximal x to end the ground
      */
     public void createInRange(int minX, int maxX) {
         rand.setSeed(seed);
-        int normalizeMinX = (minX/Block.SIZE) * Block.SIZE - Block.SIZE;
-        int normalizeMaxX = (maxX/Block.SIZE) * Block.SIZE + Block.SIZE;
+        int normalizeMinX = (minX / Block.SIZE) * Block.SIZE - Block.SIZE;
+        int normalizeMaxX = (maxX / Block.SIZE) * Block.SIZE + Block.SIZE;
         //create
         for (float x = normalizeMinX, i = 0; x <= normalizeMaxX; x += Block.SIZE, i++) {
             float height = (float) Math.floor(groundHeightAt(x) / Block.SIZE) * Block.SIZE;
             for (float y = height, j = 0; j < TERRAIN_DEPTH; y += Block.SIZE, j++) {
                 Block block = new Block(Vector2.of(x, y),
                     new RectangleRenderable(ColorSupplier.approximateColor(BASE_GROUND_COLOR)));
-                if(j == 0){
+                if (j == 0) {
                     gameObjects.addGameObject(block, groundLayer);
                     block.setTag(GROUND_FIRST_LAYER_TAG);
-                }
-                else {
+                } else {
                     gameObjects.addGameObject(block, GROUND_LAYER);
                     block.setTag(GROUND_TAG);
                 }
@@ -92,7 +97,7 @@ public class Terrain{
     }
 
     /**
-     * set noise to be sin function with random parameters that make the ground to be non-permanent
+     * Set noise to be sin function with random parameters that make the ground to be non-permanent.
      */
     private Function<Float, Float> generateNoiseFunc() {
 
@@ -116,8 +121,9 @@ public class Terrain{
         float totalFactor = pFactorTotal[rand.nextInt(pFactorTotal.length)] * rangeFactor;
 
 
-        return (Float x) -> NORMALIZE_PARAMETER * groundHeightAtX0 + totalFactor * (float) (factor1 * Math.sin(scala1 * x) +
-            factorE * Math.sin(scalaE * Math.E * x) + factorPi * Math.sin(scalaPi * Math.PI * x));
+        return (Float x) -> NORMALIZE_PARAMETER * groundHeightAtX0 + totalFactor *
+            (float) (factor1 * Math.sin(scala1 * x) + factorE * Math.sin(scalaE * Math.E * x) +
+                factorPi * Math.sin(scalaPi * Math.PI * x));
     }
 
 }

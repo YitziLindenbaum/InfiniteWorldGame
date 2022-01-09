@@ -12,6 +12,9 @@ import java.awt.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * Handles the sun in the game's world.
+ */
 public class Sun {
     private static final Float START_ANGEL =  0f;
     private static final Float FINAL_ANGEL =  360f;

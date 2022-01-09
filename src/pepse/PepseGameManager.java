@@ -116,48 +116,38 @@ public class PepseGameManager extends GameManager {
                                UserInputListener inputListener,
                                WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
-
-
         windowDimensions = windowController.getWindowDimensions();
 
-        //create sky
         Sky.create(gameObjects(),windowDimensions, SKY_LAYER);
 
-        //create terrain
         terrain = new Terrain(gameObjects(), GROUND_LAYER, windowDimensions, SEED);
         terrain.createInRange(INIT_MIN_X, INIT_MAX_X);
 
-        //create night
         Night.create(gameObjects(), NIGHT_LAYER, windowDimensions, CYCLE_LENGTH);
 
-        //create sun
         GameObject sun = Sun.create(gameObjects(), SUN_LAYER,
                 windowDimensions, CYCLE_LENGTH);
 
-        //create sun halo
         SunHalo.create(gameObjects(), SUN_HALO_LAYER, sun,
                 SUN_HALO_COLOR);
 
-        //create trees
         tree = new Tree(gameObjects(), terrain::groundHeightAt, TREE_LAYER, LEAVES_LAYER, SEED);
         tree.createInRange(INIT_MIN_X, INIT_MAX_X);
 
+        initializeLayers();
+        initializeAvatar(imageReader, inputListener, windowController);
 
-        //set avatar collide with the ground and tree
-        gameObjects().layers().shouldLayersCollide(AVATAR_LAYER, GROUND_LAYER,true); //first layer
-        //gameObjects().layers().shouldLayersCollide(AVATAR_LAYER,Terrain.GROUND_LAYER, true);
-        gameObjects().layers().shouldLayersCollide(AVATAR_LAYER, TREE_LAYER,true);
-        //set leaves collide with rhe first layer of the ground
-        gameObjects().layers().shouldLayersCollide(LEAVES_LAYER, GROUND_LAYER, true);
+    }
 
-
+    private void initializeAvatar(ImageReader imageReader, UserInputListener inputListener,
+                           WindowController windowController) {
         //create avatar
         float midX = windowDimensions.x() / 2;
         float y =
             (float) Math.floor(terrain.groundHeightAt(midX) / Block.SIZE) * Block.SIZE - Block.SIZE - Avatar.AVATAR_SIZE;
         Vector2 initialAvatarLocation = new Vector2(midX, y);
         avatar = Avatar.create(gameObjects(), AVATAR_LAYER, initialAvatarLocation,
-                inputListener, imageReader);
+            inputListener, imageReader);
 
 
         //set camera following after the avatar
@@ -166,7 +156,15 @@ public class PepseGameManager extends GameManager {
                 windowController.getWindowDimensions());
 
         setCamera(camera);
+    }
 
+    private void initializeLayers() {
+        //set avatar collide with the ground and tree
+        gameObjects().layers().shouldLayersCollide(AVATAR_LAYER, GROUND_LAYER,true); //first layer
+        //gameObjects().layers().shouldLayersCollide(AVATAR_LAYER,Terrain.GROUND_LAYER, true);
+        gameObjects().layers().shouldLayersCollide(AVATAR_LAYER, TREE_LAYER,true);
+        //set leaves collide with rhe first layer of the ground
+        gameObjects().layers().shouldLayersCollide(LEAVES_LAYER, GROUND_LAYER, true);
     }
 
     /**

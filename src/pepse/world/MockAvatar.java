@@ -26,7 +26,6 @@ public class MockAvatar extends Avatar{
         super(pos, inputListener, imageReader, gameObject);
         gameObject.removeGameObject(this.energyCounterNumeric, Layer.FOREGROUND);
         this.energyCounterNumeric = avatar.energyCounterNumeric;
-        //this.gameObjects = gameObject;
     }
 
 

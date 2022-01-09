@@ -49,20 +49,20 @@ public class Avatar extends GameObject{
      * @param pos - top left corner of avatar
      * @param inputListener - input from user
      * @param imageReader - image reader
-     * @param gameObject - game objects
+     * @param gameObjects - game objects
      */
     public Avatar(Vector2 pos, UserInputListener inputListener, ImageReader imageReader,
-                  GameObjectCollection gameObject) {
+                  GameObjectCollection gameObjects) {
         super(pos, Vector2.ONES.mult(AVATAR_SIZE),
                 imageReader.readImage(SPONGEBOB_STAND_PATH, true));
         this.imageReader = imageReader;
+        this.inputListener = inputListener;
+        this.gameObjects = gameObjects;
         //set gravity
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
-        this.inputListener = inputListener;
-        this.gameObjects = gameObject;
         //create energy counter
-        energyCounterNumeric = EnergyCounter.create(gameObject);
+        energyCounterNumeric = EnergyCounter.create(gameObjects);
         //set animation of the avatar
         this.animation = new AnimationRenderable(new ImageRenderable[]{
                 this.imageReader.readImage(SPONGEBOB_WALK_RIGHT_IMG_1_PATH, true),
@@ -143,7 +143,7 @@ public class Avatar extends GameObject{
         }
 
         //jump and fly
-        if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == 0){
+        if(inputListener.isKeyPressed(KeyEvent.VK_SPACE) && getVelocity().y() == ZERO_VEL){
             transform().setVelocityY(VELOCITY_Y);
             return;
         }
@@ -151,7 +151,7 @@ public class Avatar extends GameObject{
             setVelocity(getVelocity().multY(FACTOR_VELOCITY_DOWN));
         }
 
-        if (transform().getVelocity().y() == ZERO_VEL){
+        if (getVelocity().y() == ZERO_VEL){
             increaseEnergy();
         }
 

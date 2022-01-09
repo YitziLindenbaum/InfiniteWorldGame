@@ -75,6 +75,7 @@ public class Terrain {
      * @param maxX - the maximal x to end the ground
      */
     public void createInRange(int minX, int maxX) {
+        // reinitializing seed here gives reasonable consistency to terrain features.
         rand.setSeed(seed);
         int normalizeMinX = (minX / Block.SIZE) * Block.SIZE - Block.SIZE;
         int normalizeMaxX = (maxX / Block.SIZE) * Block.SIZE + Block.SIZE;

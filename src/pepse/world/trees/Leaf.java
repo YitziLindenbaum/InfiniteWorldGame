@@ -76,7 +76,7 @@ public class Leaf extends GameObject{
     }
 
     /**
-     * handling collision of leaf with the first layer of the ground, make the leaf stop move.
+     * Handles collision of leaf with the first layer of the ground, make the leaf stop moving.
      */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
@@ -86,7 +86,7 @@ public class Leaf extends GameObject{
     }
 
     /**
-     * Responsible for leaf swinging
+     * Responsible for leaf swinging (when on tree).
      */
     private void sway() {
         new Transition<Float>(this, this.renderer()::setRenderableAngle,
@@ -97,7 +97,7 @@ public class Leaf extends GameObject{
     }
 
     /**
-     * Responsible for leaf narrowing
+     * Responsible for leaf narrowing (when on tree).
      */
     private void narrow() {
          new Transition<Vector2>(this, this::setDimensions,
@@ -114,7 +114,7 @@ public class Leaf extends GameObject{
     private void fall() {
         this.renderer().fadeOut(FADEOUT_TIME, delayedRecreateLeaf());
         this.transform().setVelocityY(FALL_SPEED); //response of the vertical velocity
-        //response of horizontal velocity
+        //response of horizontal velocity (while falling)
         horizontalTransition = new Transition<Float>(this, this.transform()::setVelocityX,
                 FALLING_SWAY_SPEED, -FALLING_SWAY_SPEED, Transition.CUBIC_INTERPOLATOR_FLOAT,
                 FALLING_SWAY_CYCLE_LENGTH, Transition.TransitionType.TRANSITION_BACK_AND_FORTH, null);

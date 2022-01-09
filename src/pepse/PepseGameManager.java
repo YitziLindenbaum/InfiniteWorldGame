@@ -114,7 +114,6 @@ public class PepseGameManager extends GameManager {
                                WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
 
-        System.out.println(SEED);
         windowDimensions = windowController.getWindowDimensions();
 
         //create sky

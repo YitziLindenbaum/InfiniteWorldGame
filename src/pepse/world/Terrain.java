@@ -4,6 +4,7 @@ import danogl.collisions.GameObjectCollection;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
 import pepse.util.ColorSupplier;
+import pepse.util.Noise;
 
 import java.awt.*;
 import java.util.Random;
@@ -16,20 +17,11 @@ public class Terrain{
     public static final String GROUND_TAG = "ground";
     public static final String GROUND_FIRST_LAYER_TAG = "ground0";
 
-    //noise method constants
-    private static final float NORMALIZE_PARAMETER = 1.1f;
-    private static final float RANGE_NOISE = 10f;
-    private static final float[] P_NOISE = {-1.5f, -1.4f, -1.3f, -1.2f, -1.2f, -1.1f, -1.0f, -0.9f, -0.8f, -0.7f, -0.6f,
-            1.5f, 1.4f, 1.3f, 1.2f, 1.2f, 1.1f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f};
-    public static final float[] P_FACTOR_TOTAL_NOISE = {-0.1f, 0.1f};
-
     public static int GROUND_LAYER; //it's public to use in the game manager
     private static final float GROUND_HEIGHT = 2f / 3f;
     private final GameObjectCollection gameObjects;
     private final int groundLayer;
-    private final float groundHeightAtX0;
     private final int seed;
-    private final Vector2 windowDimensions;
     private final Function<Float, Float> noise;
     private final Random rand;
 
@@ -46,12 +38,11 @@ public class Terrain{
         this.gameObjects = gameObjects;
         this.groundLayer = groundLayer;
         GROUND_LAYER = groundLayer + 1; //set the ground layer of the block that not in the first layer
-        this.groundHeightAtX0 = windowDimensions.y() * GROUND_HEIGHT;
-        this.windowDimensions = windowDimensions;
+        float groundHeightAtX0 = windowDimensions.y() * GROUND_HEIGHT;
         this.seed = seed;
         rand = new Random(seed);
         //set the lambda noise
-        this.noise = generateNoiseFunc();
+        this.noise = Noise.generateNoiseFunc(seed, groundHeightAtX0, windowDimensions.x());
     }
 
     /**
@@ -89,35 +80,6 @@ public class Terrain{
             }
         }
 
-    }
-
-    /**
-     * set noise to be sin function with random parameters that make the ground to be non-permanent
-     */
-    private Function<Float, Float> generateNoiseFunc() {
-
-        //array of parameters to scala and factor of sin function
-        float[] p = P_NOISE;
-        float[] pFactorTotal = P_FACTOR_TOTAL_NOISE;
-
-        float rangeFactor = groundHeightAtX0 / 2; //Helps normalize y values to window size
-        //take the function we get in rang [0,10] and normalize x values to window size
-        float normalizeRangeX = RANGE_NOISE / windowDimensions.x();
-
-        float factorE = p[rand.nextInt(p.length)];
-        float scalaE = p[rand.nextInt(p.length)] * normalizeRangeX;
-
-        float factorPi = p[rand.nextInt(p.length)];
-        float scalaPi = p[rand.nextInt(p.length)] * normalizeRangeX;
-
-        float factor1 = p[rand.nextInt(p.length)];
-        float scala1 = p[rand.nextInt(p.length)] * normalizeRangeX;
-
-        float totalFactor = pFactorTotal[rand.nextInt(pFactorTotal.length)] * rangeFactor;
-
-
-        return (Float x) -> NORMALIZE_PARAMETER * groundHeightAtX0 + totalFactor * (float) (factor1 * Math.sin(scala1 * x) +
-            factorE * Math.sin(scalaE * Math.E * x) + factorPi * Math.sin(scalaPi * Math.PI * x));
     }
 
 }

@@ -186,9 +186,13 @@ public class Avatar extends GameObject{
             isMockAvatarInGame = true;
         }
         if(inputListener.isKeyPressed(KeyEvent.VK_D) && isMockAvatarInGame){
-            gameObjects.removeGameObject(mockAvatar, Layer.DEFAULT);
-            isMockAvatarInGame = false;
+            removeMockAvatar();
         }
+    }
+
+    protected void removeMockAvatar(){
+        gameObjects.removeGameObject(mockAvatar, Layer.DEFAULT);
+        isMockAvatarInGame = false;
     }
 
 

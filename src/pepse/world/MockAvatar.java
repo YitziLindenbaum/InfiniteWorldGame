@@ -24,6 +24,8 @@ public class MockAvatar extends Avatar{
     private static final String PATRICK_WALK_RIGHT_IMG_5_PATH = "assets/patrickWalk/img5.png";
     private static final float TIME_BETWEEN_CLIPS = 0.5F;
     public static final int SIZE_MOCK_AVATAR = 85;
+    private static final float LENIENT_MAX_DIST = 400;
+    private static final float STRICT_MAX_DIST = 1000;
     private final Avatar parentAvatar;
 
     /**
@@ -80,12 +82,17 @@ public class MockAvatar extends Avatar{
         super.update(deltaTime);
 
         // sidekick is too far to the right
-        if (getCenter().x() - parentAvatar.getCenter().x() > 400) {
+        if (getCenter().x() - parentAvatar.getCenter().x() > LENIENT_MAX_DIST) {
             transform().setVelocityX(Math.min(0, getVelocity().x()));
         }
         // sidekick is too far to the left
-        else if (parentAvatar.getCenter().x() - getCenter().x() > 400) {
+        else if (parentAvatar.getCenter().x() - getCenter().x() > LENIENT_MAX_DIST) {
             transform().setVelocityX(Math.max(0, getVelocity().x()));
+        }
+
+        // Main avatar has actively tried to distance itself too much from sidekick
+        if (Math.abs(getCenter().x() - parentAvatar.getCenter().x()) > STRICT_MAX_DIST) {
+            parentAvatar.removeMockAvatar();
         }
     }
 }

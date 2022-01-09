@@ -2,6 +2,7 @@ package pepse.world;
 
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
+import danogl.collisions.Layer;
 import danogl.components.GameObjectPhysics;
 import danogl.gui.ImageReader;
 import danogl.gui.UserInputListener;
@@ -16,9 +17,9 @@ import java.awt.event.KeyEvent;
  * Represents the avatar in the game.
  */
 public class Avatar extends GameObject{
-    private static final float VELOCITY_X = 300;
-    private static final float VELOCITY_Y = -300;
-    private static final float GRAVITY = 500;
+    protected static final float VELOCITY_X = 300;
+    protected static final float VELOCITY_Y = -300;
+    protected static final float GRAVITY = 500;
     public static final int AVATAR_SIZE = 65;
 
     private static final float TIME_BETWEEN_CLIPS = 0.5F;
@@ -28,17 +29,20 @@ public class Avatar extends GameObject{
     private static final String SPONGEBOB_WALK_RIGHT_IMG_3_PATH = "assets/spongebobWalk/img3.png";
     private static final String SPONGEBOB_WALK_RIGHT_IMG_4_PATH = "assets/spongebobWalk/img4.png";
     private static final String SPONGEBOB_WALK_RIGHT_IMG_5_PATH = "assets/spongebobWalk/img5.png";
-    private static final float FACTOR_VELOCITY_DOWN = 0.7f;
+    protected static final float FACTOR_VELOCITY_DOWN = 0.7f;
     public static final String AVATAR_TAG = "avatar";
 
     private static final int AVATAR_ANGLE_FLY = -45;
-    private static final int ZERO_VEL = 0;
-    private static final int ZERO_ANGLE = 0;
+    protected static final int ZERO_VEL = 0;
+    protected static final int ZERO_ANGLE = 0;
 
-    private final UserInputListener inputListener;
-    private final EnergyCounter energyCounterNumeric;
+    protected final UserInputListener inputListener;
+    protected EnergyCounter energyCounterNumeric;
+    protected GameObjectCollection gameObjects;
     private final ImageReader imageReader;
     private final AnimationRenderable animation;
+    private boolean isMockAvatarInGame = false;
+    private MockAvatar mockAvatar;
 
     /**
      * Create a new Avatar object.
@@ -56,6 +60,7 @@ public class Avatar extends GameObject{
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
         this.inputListener = inputListener;
+        this.gameObjects = gameObject;
         //create energy counter
         energyCounterNumeric = EnergyCounter.create(gameObject);
         //set animation of the avatar
@@ -150,7 +155,26 @@ public class Avatar extends GameObject{
             energyCounterNumeric.increase();
         }
 
+        handleMockAvatar();
+
     }
+
+    /**
+     *
+     */
+    protected void handleMockAvatar() {
+        if(inputListener.isKeyPressed(KeyEvent.VK_P) && !isMockAvatarInGame){
+            Vector2 pos = new Vector2(getTopLeftCorner().x() + 30f, getTopLeftCorner().y());
+            mockAvatar = new MockAvatar(pos, inputListener, imageReader,gameObjects, this);
+            gameObjects.addGameObject(mockAvatar, Layer.DEFAULT);
+            isMockAvatarInGame = true;
+        }
+        if(inputListener.isKeyPressed(KeyEvent.VK_D) && isMockAvatarInGame){
+            gameObjects.removeGameObject(mockAvatar, Layer.DEFAULT);
+            isMockAvatarInGame = false;
+        }
+    }
+
 
 
     /**

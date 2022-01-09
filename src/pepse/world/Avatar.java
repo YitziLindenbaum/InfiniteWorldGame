@@ -192,7 +192,6 @@ public class Avatar extends GameObject{
     }
 
 
-
     /**
      * create new avatar
      * @param gameObjects - game objects
@@ -205,7 +204,7 @@ public class Avatar extends GameObject{
     public static Avatar create(GameObjectCollection gameObjects,
                                 int layer, Vector2 topLeftCorner,
                                 UserInputListener inputListener, ImageReader imageReader){
-        Avatar avatar = new Avatar(topLeftCorner, inputListener, imageReader ,gameObjects);
+        Avatar avatar = new Avatar(topLeftCorner, inputListener, imageReader, gameObjects);
         gameObjects.addGameObject(avatar, layer);
         avatar.physics().preventIntersectionsFromDirection(Vector2.ZERO);
         avatar.physics().setMass(-GameObjectPhysics.IMMOVABLE_MASS);

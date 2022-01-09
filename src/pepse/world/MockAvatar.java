@@ -24,6 +24,7 @@ public class MockAvatar extends Avatar{
     private static final String PATRICK_WALK_RIGHT_IMG_5_PATH = "assets/patrickWalk/img5.png";
     private static final float TIME_BETWEEN_CLIPS = 0.5F;
     public static final int SIZE_MOCK_AVATAR = 85;
+    private final Avatar parentAvatar;
 
     /**
      * Create a new MockAvatar object.
@@ -36,6 +37,7 @@ public class MockAvatar extends Avatar{
                       GameObjectCollection gameObject, Avatar avatar) {
         super(pos, inputListener, imageReader, gameObject);
         gameObject.removeGameObject(this.energyCounterNumeric, Layer.FOREGROUND);
+        this.parentAvatar = avatar;
         this.energyCounterNumeric = avatar.energyCounterNumeric;
         this.animation = new AnimationRenderable(new ImageRenderable[]{
                 imageReader.readImage(PATRICK_WALK_RIGHT_IMG_1_PATH, true),
@@ -68,4 +70,22 @@ public class MockAvatar extends Avatar{
      */
     @Override
     protected void decreaseEnergy() {}
+
+    /**
+     * Prevents sidekick from getting too far from main avatar.
+     * @param deltaTime - time passed since last call to update.
+     */
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+
+        // sidekick is too far to the right
+        if (getCenter().x() - parentAvatar.getCenter().x() > 400) {
+            transform().setVelocityX(Math.min(0, getVelocity().x()));
+        }
+        // sidekick is too far to the left
+        else if (parentAvatar.getCenter().x() - getCenter().x() > 400) {
+            transform().setVelocityX(Math.max(0, getVelocity().x()));
+        }
+    }
 }

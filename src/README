@@ -9,8 +9,9 @@ we would need to inherit and override onCollisionEnter. It also simply made sens
 standpoint.
 In addition, the smooth noise function was originally a private method in Terrain. We decided to make it
 its own class in the util package, since it's potentially useful for other things in a simulated world.
-Finally, the EnergyCounter was originally handled in a private method in Avatar, and we realized that since
+The EnergyCounter was originally handled in a private method in Avatar, and we realized that since
 it's a separate renderable and everything it deserves its own small object.
+Finally, we added the MockAvatar (sidekick) to the game.
 
 
 Infinite World

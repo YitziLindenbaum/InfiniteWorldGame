@@ -126,7 +126,7 @@ public class Leaf extends GameObject{
      * @return Runnable
      */
     private Runnable delayedRecreateLeaf() {
-        // written out for readability, to avoid lambdas-within-lambdas
+        // written out for readability (to avoid lambdas-within-lambdas)
         return () -> new ScheduledTask(this, DEAD_TIME, false, () -> {
             new Leaf(topLeftCorner, gameObjects, leafLayer, rand);
             gameObjects.removeGameObject(this, leafLayer);

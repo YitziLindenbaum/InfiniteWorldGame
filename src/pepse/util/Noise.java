@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 /**
  * Responsible for providing smooth noise function for Terrain.
+ * Function taken from https://www.titanwolf.org/Network/q/3a0c719f-c433-44f6-9dc1-6f1fbf03f996/y.
  */
 public class Noise {
 

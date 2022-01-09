@@ -24,7 +24,7 @@ public class Leaf extends GameObject{
     private static final float FADEOUT_TIME = 40;
     private static final float FALL_SPEED = 20;
     private static final float DEAD_TIME = 5;
-    private static final float MAX_LEAF_LIFE = 420;
+    private static final float MAX_LEAF_LIFE = 600;
     private static final Float FALLING_SWAY_SPEED = 15f;
     private static final float FALLING_SWAY_CYCLE_LENGTH = 4;
     public static final String LEAF_TAG = "leaf";

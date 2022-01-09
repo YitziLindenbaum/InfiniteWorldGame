@@ -55,3 +55,5 @@ At the last second, we decided to add an option for a "mock avatar" - like in so
 main avatar has a sidekick that follows them around. The mock avatar is added at the press of the 'p' key,
 since (naturally) the mock avatar is in the likeness of our other favorite TA, Patrick. It is deleted at
 the press of the 'd' key.
+Note that we made sure that Patrick can't decide to walk too far away from Spongebob. However, Spongebob
+can get too far away from Patrick, in which case Patrick is automatically removed from the game.

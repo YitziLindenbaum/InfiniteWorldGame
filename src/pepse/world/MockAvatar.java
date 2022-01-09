@@ -44,6 +44,7 @@ public class MockAvatar extends Avatar{
         }, TIME_BETWEEN_CLIPS);
         this.standAnimation = imageReader.readImage(PATRICK_STAND_PATH, true);
         this.setDimensions(Vector2.ONES.mult(SIZE_MOCK_AVATAR));
+
     }
 
     @Override

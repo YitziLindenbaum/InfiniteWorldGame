@@ -21,7 +21,7 @@ direction of the imminent apocalypse and a chunk of the world in the opposite di
 unnecessary calculations slowing down the game.
 We cleverly manipulated the seed of the Random object, using the x-coordinate of the creation as an argument,
 to make sure that the world, if destroyed and recreated, was created in a reasonably consistent fashion, for
-the gods of PEPSE, if nothing else, are vigorously consistent.
+the gods of PEPSE, if nothing else, are rigorously consistent.
 
 
 Trees

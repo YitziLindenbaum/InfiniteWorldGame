@@ -180,7 +180,7 @@ public class Avatar extends GameObject{
      */
     protected void handleMockAvatar() {
         if(inputListener.isKeyPressed(KeyEvent.VK_P) && !isMockAvatarInGame){
-            Vector2 pos = getTopLeftCorner().add(Vector2.of(30f, 0));
+            Vector2 pos = getTopLeftCorner().add(Vector2.of(-100f, -100f));
             mockAvatar = new MockAvatar(pos, inputListener, imageReader, gameObjects, this);
             gameObjects.addGameObject(mockAvatar, Layer.DEFAULT);
             isMockAvatarInGame = true;

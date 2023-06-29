@@ -16,12 +16,12 @@ import java.awt.event.KeyEvent;
  * Represents the "sidekick" avatar.
  */
 public class MockAvatar extends Avatar{
-    private static final String PATRICK_STAND_PATH = "assets/patrickStand.png";
-    private static final String PATRICK_WALK_RIGHT_IMG_1_PATH = "assets/patrickWalk/img1.png";
-    private static final String PATRICK_WALK_RIGHT_IMG_2_PATH = "assets/patrickWalk/img2.png";
-    private static final String PATRICK_WALK_RIGHT_IMG_3_PATH = "assets/patrickWalk/img3.png";
-    private static final String PATRICK_WALK_RIGHT_IMG_4_PATH = "assets/patrickWalk/img4.png";
-    private static final String PATRICK_WALK_RIGHT_IMG_5_PATH = "assets/patrickWalk/img5.png";
+    private static final String PATRICK_STAND_PATH = "pepse/assets/patrickStand.png";
+    private static final String PATRICK_WALK_RIGHT_IMG_1_PATH = "pepse/assets/patrickWalk/img1.png";
+    private static final String PATRICK_WALK_RIGHT_IMG_2_PATH = "pepse/assets/patrickWalk/img2.png";
+    private static final String PATRICK_WALK_RIGHT_IMG_3_PATH = "pepse/assets/patrickWalk/img3.png";
+    private static final String PATRICK_WALK_RIGHT_IMG_4_PATH = "pepse/assets/patrickWalk/img4.png";
+    private static final String PATRICK_WALK_RIGHT_IMG_5_PATH = "pepse/assets/patrickWalk/img5.png";
     private static final float TIME_BETWEEN_CLIPS = 0.5F;
     public static final int SIZE_MOCK_AVATAR = 85;
     private static final float LENIENT_MAX_DIST = 400;

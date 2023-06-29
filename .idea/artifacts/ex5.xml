@@ -2,10 +2,22 @@
   <artifact type="jar" name="ex5">
     <output-path>$PROJECT_DIR$/out/artifacts/ex5</output-path>
     <root id="archive" name="ex5.jar">
-      <element id="directory" name="folder">
-        <element id="dir-copy" path="$PROJECT_DIR$/assets" />
-        <element id="dir-copy" path="$PROJECT_DIR$/src" />
+      <element id="directory" name="pepse">
+        <element id="directory" name="util">
+          <element id="file-copy" path="$PROJECT_DIR$/src/pepse/util/EnergyCounter.java" />
+          <element id="file-copy" path="$PROJECT_DIR$/src/pepse/util/Noise.java" />
+        </element>
+        <element id="directory" name="world">
+          <element id="dir-copy" path="$PROJECT_DIR$/src/pepse/world" />
+        </element>
+        <element id="file-copy" path="$PROJECT_DIR$/src/pepse/PepseGameManager.java" />
+        <element id="directory" name="assets">
+          <element id="dir-copy" path="$PROJECT_DIR$/src/pepse/assets" />
+        </element>
       </element>
+      <element id="file-copy" path="$PROJECT_DIR$/uml_after.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/uml_before.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/README" />
     </root>
   </artifact>
 </component>

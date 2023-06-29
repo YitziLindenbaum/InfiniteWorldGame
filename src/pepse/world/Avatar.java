@@ -23,12 +23,12 @@ public class Avatar extends GameObject{
     public static final int AVATAR_SIZE = 65;
 
     private static final float TIME_BETWEEN_CLIPS = 0.5F;
-    private static final String SPONGEBOB_STAND_PATH = "assets/spongebobStand.png";
-    private static final String SPONGEBOB_WALK_RIGHT_IMG_1_PATH = "assets/spongebobWalk/img1.png";
-    private static final String SPONGEBOB_WALK_RIGHT_IMG_2_PATH = "assets/spongebobWalk/img2.png";
-    private static final String SPONGEBOB_WALK_RIGHT_IMG_3_PATH = "assets/spongebobWalk/img3.png";
-    private static final String SPONGEBOB_WALK_RIGHT_IMG_4_PATH = "assets/spongebobWalk/img4.png";
-    private static final String SPONGEBOB_WALK_RIGHT_IMG_5_PATH = "assets/spongebobWalk/img5.png";
+    private static final String SPONGEBOB_STAND_PATH = "pepse/assets/spongebobStand.png";
+    private static final String SPONGEBOB_WALK_RIGHT_IMG_1_PATH = "pepse/assets/spongebobWalk/img1.png";
+    private static final String SPONGEBOB_WALK_RIGHT_IMG_2_PATH = "pepse/assets/spongebobWalk/img2.png";
+    private static final String SPONGEBOB_WALK_RIGHT_IMG_3_PATH = "pepse/assets/spongebobWalk/img3.png";
+    private static final String SPONGEBOB_WALK_RIGHT_IMG_4_PATH = "pepse/assets/spongebobWalk/img4.png";
+    private static final String SPONGEBOB_WALK_RIGHT_IMG_5_PATH = "pepse/assets/spongebobWalk/img5.png";
     protected static final float FACTOR_VELOCITY_DOWN = 0.7f;
     public static final String AVATAR_TAG = "avatar";
 
